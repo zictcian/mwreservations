@@ -15,17 +15,13 @@ export default {
 hr{
   color: black;
 }
-  .btn{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-left: 10px;
-  }
   form{
     width: 50%;
-    margin-top: 50px;
     border-color: black;
     border: black;
     background-color: antiquewhite;
+    margin-left: 25%;
+    margin-top: 50px;
   }
   .forgot-password a{
     color: #167bff;
@@ -69,7 +65,6 @@ hr{
   .navbar-light{
     background-color: #ffffff;
     box-shadow: 0px 14px 80px rgba(34,35,58,0.2);
-    margin-bottom: 100px;
   }
   #app{
     text-align: center;
@@ -84,9 +79,7 @@ hr{
   }
   body{
     background: #1c8ef9;
-    min-height: 100vh;
     display: flex;
-    font-weight: 400;
     font-family: 'Fira Sans', sans-serif;
   }
   * {
