@@ -1,13 +1,15 @@
 <template>
   <NavMW></NavMW>
   <router-view/>
+  <FooterMWVue></FooterMWVue>
 </template>
 
 <script>
 import NavMW from './components/NavMW.vue'
+import FooterMWVue from './components/FooterMW.vue'
 export default {
   name: 'App',
-  components: { NavMW }
+  components: { NavMW, FooterMWVue }
 }
 </script>
 
@@ -69,7 +71,7 @@ hr{
   #app{
     text-align: center;
   }
-  body,html,#app,#root, .auth-wrapper{
+  html,#app,#root,body{
     width: 100%;
     height: 100%;
   }
@@ -77,8 +79,8 @@ hr{
     font-weight: 500;
     font-family: 'Fira Sans', sans-serif;
   }
-  body{
-    background: #1c8ef9;
+ body{
+    background: antiquewhite;
     display: flex;
     font-family: 'Fira Sans', sans-serif;
   }

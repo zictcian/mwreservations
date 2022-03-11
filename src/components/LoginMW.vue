@@ -1,7 +1,7 @@
 <template>
 <body>
 <div class="container-fluid">
-    <form action="" method="post" @submit.prevent="handleSubmit">
+    <form>
         <h3>Login</h3>
         <hr>
         <div class="input-group mb-3">
@@ -12,30 +12,51 @@
             <label for="">Password</label>
             <input v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
-        <button type="submit" class="btn btn-primary mb-3">Login</button>
+        <button v-on:click="login" class="btn btn-primary mb-3">Login</button>
     </form>
     </div>
     </body>
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'LoginMW',
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      error: null
     }
   },
   methods: {
-    async handleSubmit () {
-      const response = await axios.post('login', {
-        email: this.email,
-        password: this.password
+    async login () {
+      const formdata = new FormData()
+      formdata.append('correo', this.email)
+      formdata.append('pass', this.password)
+      await fetch('http://localhost/mwreservation/login.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        console.log(datosRespuest.id)
+        if (datosRespuest != null) {
+          this.error = false
+          localStorage.setItem('valor', datosRespuest.id)
+        } else {
+          this.error = true
+        }
+      }).catch(e => {
+        console.log(e)
+        this.error = true
       })
-      console.log(response)
-      this.$router.push('/')
+      /* localStorage.setItem('token', response.data.token) */
+      if (this.error != null && this.error === false) {
+        this.$router.push({ name: 'InicioMW' })
+      } else {
+        alert('Acceso denegado')
+      }
     }
   }
 }
@@ -58,5 +79,8 @@ body{
     background-position: center;
     background-size: cover;
     font-family: 'Fira Sans', sans-serif;
+}
+.btn{
+  margin-left: 45%;
 }
 </style>

@@ -1,9 +1,27 @@
+import ConocenosMW from '@/components/ConocenosMW.vue'
 import HomeMW from '@/components/HomeMW.vue'
+import InicioMW from '@/components/InicioMW.vue'
 import LoginMW from '@/components/LoginMW.vue'
 import RegisterMW from '@/components/RegisterMW.vue'
+import CategoriasMW from '@/components/CategoriasMW.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
+  {
+    path: '/categorias',
+    name: 'CategoriasMW',
+    component: CategoriasMW
+  },
+  {
+    path: '/conocenos',
+    name: 'ConocenosMW',
+    component: ConocenosMW
+  },
+  {
+    path: '/inicio',
+    name: 'InicioMW',
+    component: InicioMW
+  },
   {
     path: '/',
     name: 'HomeMW',
@@ -15,7 +33,7 @@ const routes = [
     component: LoginMW
   },
   {
-    path: '/Register',
+    path: '/register',
     name: 'RegisterMW ',
     component: RegisterMW
   },
