@@ -1,7 +1,7 @@
 <template>
 <body>
 <div class="container-fluid">
-    <form>
+    <div class="form-group forma">
         <h3>Login</h3>
         <hr>
         <div class="input-group mb-3">
@@ -12,8 +12,9 @@
             <label for="">Password</label>
             <input v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
-        <button v-on:click="login" class="btn btn-primary mb-3">Login</button>
-    </form>
+        <button v-on:click="login" class="btn btn-primary mb-3">Login</button><br>
+        <a href="/register" class="btn1">Eres nuevo? crear cuenta</a>
+    </div>
     </div>
     </body>
 </template>
@@ -23,7 +24,7 @@ export default {
   name: 'LoginMW',
   data () {
     return {
-      email: '',
+      email: this.$route.params.email,
       password: '',
       error: null
     }
@@ -44,6 +45,11 @@ export default {
         if (datosRespuest != null) {
           this.error = false
           localStorage.setItem('valor', datosRespuest.id)
+          localStorage.setItem('nombre', datosRespuest.nombre)
+          localStorage.setItem('Apaterno', datosRespuest.Apaterno)
+          localStorage.setItem('Amaterno', datosRespuest.Amaterno)
+          localStorage.setItem('correo', datosRespuest.correo)
+          localStorage.setItem('c', datosRespuest.passencryp)
         } else {
           this.error = true
         }
@@ -82,5 +88,18 @@ body{
 }
 .btn{
   margin-left: 45%;
+}
+.btn1{
+  margin-left: 40%;
+  text-decoration: underline;
+  text-align: center;
+}
+.forma{
+  background-color: antiquewhite;
+  align-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 </style>

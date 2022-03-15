@@ -35,6 +35,7 @@
            </th>
         </tr>
     </table>
+    <hr>
     </div>
     <button class="boton">
         <center><a class="mw" href="https://mwc.com.mx/">Ir a MWConsultores </a><i class="fa fa-external-link mw"></i></center>
@@ -66,5 +67,14 @@ h1{
 }
 .mw{
  color: white;
+}
+.cuerpo{
+    background-color: rgb(214, 214, 214);
+  border: black;
+  height: 220px;
+  width: 100%;
+  bottom: 0;
+  position: fixed;
+  margin-top: 300px;
 }
 </style>

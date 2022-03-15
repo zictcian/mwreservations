@@ -38,5 +38,6 @@ a {
   width: 100%;
   bottom: 0;
   position: fixed;
+  margin-top: 300px;
 }
 </style>

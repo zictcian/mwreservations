@@ -5,11 +5,34 @@ import LoginMW from '@/components/LoginMW.vue'
 import RegisterMW from '@/components/RegisterMW.vue'
 import CategoriasMW from '@/components/CategoriasMW.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-
+import CategoriaEspecifica from '@/components/CategoriaEspecifica.vue'
+import FavoritoMW from '@/components/FavoritoMW.vue'
+import UsuarioMW from '@/components/UsuarioMW.vue'
+import CarritoMW from '@/components/CarritoMW.vue'
 const routes = [
   {
-    path: '/categorias',
+    path: '/carrito',
+    name: 'CarritoMW',
+    component: CarritoMW
+  },
+  {
+    path: '/usuario',
+    name: 'UsuarioMW',
+    component: UsuarioMW
+  },
+  {
+    path: '/fav',
+    name: 'FavMW',
+    component: FavoritoMW
+  },
+  {
+    path: '/categorias/:id',
     name: 'CategoriasMW',
+    component: CategoriaEspecifica
+  },
+  {
+    path: '/categorias',
+    name: 'CategoriaMW',
     component: CategoriasMW
   },
   {
@@ -51,6 +74,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  mode: 'history',
   routes
 })
 

@@ -1,84 +1,106 @@
 <template>
-<head>
-  <meta charset="utf-8">
-</head>
 <body>
 <div class="container-fluid">
-    <form @submit="postData">
+    <div class="form-group forma">
         <h3>Register</h3>
-        <p id="resultado">Cuenta de: {{posts.nombre}} {{posts.Apaterno}} {{posts.Amaterno}}</p>
+        <p id="resultado">Cuenta de: <span class="badge badge-pill badge-success">{{nombre}} {{Apaterno}} {{Amaterno}}</span></p>
         <hr>
         <div class="input-group mb-3">
-            <label for="">Nombre</label>
-            <input name="nombre" v-model="posts.nombre" type="text" class="form-control inputwigth" placeholder="Nombre"/>
+            <label for="nombre">Nombre</label>
+            <input name="nombre" v-model="nombre" type="text" class="form-control inputwigth" placeholder="Nombre"/>
         </div>
         <div class="input-group mb-3">
-            <label for="">Apellido Paterno</label>
-            <input name="Apaterno" v-model="posts.Apaterno" type="text" class="form-control inputwigth" placeholder="Primer apellido"/>
+            <label for="Apaterno">Apellido Paterno</label>
+            <input name="Apaterno" v-model="Apaterno" type="text" class="form-control inputwigth" placeholder="Primer apellido"/>
         </div>
         <div class="input-group mb-3">
-            <label for="">Apellido Materno</label>
-            <input name="Amaterno" v-model="posts.Amaterno" type="text" class="form-control inputwigth" placeholder="Segundo apellido"/>
+            <label for="Amaterno">Apellido Materno</label>
+            <input name="Amaterno" v-model="Amaterno" type="text" class="form-control inputwigth" placeholder="Segundo apellido"/>
         </div>
         <div class="input-group mb-3">
-            <label for="">Email</label>
-            <input name="email" v-model="posts.email" type="email" class="form-control inputwigth" placeholder="Email"/>
+            <label for="email">Email</label>
+            <input name="email" v-model="email" type="email" class="form-control inputwigth" placeholder="Email"/>
         </div>
         <div class="input-group mb-3">
-            <label for="">Password</label>
-            <input name="password" v-model="posts.password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
+            <label for="password">Password</label>
+            <input name="password" v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
         <div class="input-group mb-3">
-            <label for="">Confirmar password</label>
-            <input name="password2" v-model="posts.password2" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
+            <label for="password2">Confirmar password</label>
+            <input name="password2" v-model="password2" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
-        <span class="error inputwigth" v-if="passwordError2">{{passwordError2}}</span>
-        <button type="submit" class="btn btn-primary mb-2">Registrar</button>
-    </form>
+        <div class="inputwigth error"><span class="" v-if="passwordError2">{{passwordError2}}</span></div>
+        <button v-on:Click="postData" class="btn btn-primary mb-2">Registrar</button><br>
+        <a href="/login" class="btn1">ya tengo cuenta! gracias</a>
+    </div>
 </div>
 </body>
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'RegisterMW',
   data () {
     return {
-      posts: {
-        nombre: '',
-        Apaterno: '',
-        Amaterno: '',
-        email: '',
-        password: '',
-        password2: ''
-      },
+      nombre: '',
+      Apaterno: '',
+      Amaterno: '',
+      email: '',
+      password: '',
+      password2: '',
       passwordError2: ''
     }
   },
   methods: {
-    postData (e) {
-      if (this.posts.password !== this.posts.password2) {
-        this.passwordError2 = '* Error las contraseñas no coinciden'
-        alert('Error detectado')
-      } else {
-        this.axios.post('/register', this.posts).then((resultado) => {
-          console.warn(resultado)
-        })
+    postData () {
+      this.passwordError2 = ''
+      if (this.email === '') {
+        this.passwordError2 = this.passwordError2 + ' *El correo es obligatorio'
       }
-      e.preventDefault()
+      if (this.nombre === '') {
+        this.passwordError2 = this.passwordError2 + ' *El nombre es obligatorio'
+      }
+      if (this.Apaterno === '') {
+        this.passwordError2 = this.passwordError2 + ' *El apellido paterno es obligatorio'
+      }
+      if (this.password.length < 8) {
+        this.passwordError2 = this.passwordError2 + ' *El password debe ser minimo 8 caracteres'
+      } else if (this.password === this.nombre) {
+        this.passwordError2 = this.passwordError2 + ' *El password no puede ser el nombre'
+      }
+      if (this.password !== this.password2) {
+        this.passwordError2 = this.passwordError2 + ' *Las contraseñas deben coincidir'
+      }
+      if (this.passwordError2 === '') {
+        this.register()
+      } else {
+        alert('Error detectado')
+      }
     },
-    register () {
-      axios.post('/login', {
-        nombre: this.nombre,
-        apellido: this.apellidopaterno,
-        apellidomaterno: this.apellidomaterno,
-        email: this.email,
-        password: this.password,
-        confirmpassword: this.confirmpassword
+    async register () {
+      const formdata = new FormData()
+      formdata.append('correo', this.email)
+      formdata.append('password', this.password)
+      formdata.append('nombre', this.nombre)
+      formdata.append('Apaterno', this.Apaterno)
+      formdata.append('Amaterno', this.Amaterno)
+      await fetch('http://localhost/mwreservation/registrarse.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        if (datosRespuest === 'error') {
+          alert('el correo ya esta registrado')
+        } else {
+          alert('usuario creado')
+          this.$router.push({ name: 'LoginMW', params: { email: this.email } })
+        }
+      }).catch(e => {
+        console.log(e)
+        alert('Error al crear')
       })
-      this.$router.push('/login')
     }
   }
 }
@@ -86,7 +108,7 @@ export default {
 
 <style scoped>
 .inputwigth{
-    width: 40%;
+    width: 60%;
     margin-left: 10px;
     margin-right: 10px;
 }
@@ -105,6 +127,11 @@ body{
 .btn{
   margin-left: 45%;
 }
+.btn1{
+  margin-left: 40%;
+  text-decoration: underline;
+  text-align: center;
+}
 .error{
   color: red;
   font-family: 'Times New Roman', Times, serif;
@@ -112,5 +139,13 @@ body{
   margin-left: 25%;
   padding-top: 0%;
   margin-top: 0%;
+}
+.forma{
+  background-color: antiquewhite;
+  align-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 </style>

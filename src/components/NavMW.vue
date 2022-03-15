@@ -9,6 +9,12 @@
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
+              <a href="/inicio" class="nav-link"><i class="bi bi-house-fill colore"></i></a>
+            </li>
+            <li class="nav-item">
+              <a href="/fav" class="nav-link"><i class="bi bi-heart-fill colore"></i>Favoritos</a>
+            </li>
+            <li class="nav-item">
               <a href="/categorias" class="nav-link">Categorias</a>
             </li>
             <li class="nav-item">
@@ -18,7 +24,10 @@
               <a href="/login" class="nav-link">Login</a>
             </li>
             <li class="nav-item">
-              <a href="/register" class="nav-link">sign in</a>
+              <a href="/carrito" class="nav-link"><i class="bi bi-cart colore"></i></a>
+            </li>
+            <li class="nav-item">
+              <a href="/usuario" class="nav-link"><i class="bi bi-person-circle colore"></i></a>
             </li>
           </ul>
         </div>
@@ -54,7 +63,10 @@ export default {
 }
 .nav-item:hover{
   color: blue;
-  background-color: green;
-  border-radius: 40%;
+  background-color: lightgray;
+  text-decoration: underline;
+}
+.colore:hover{
+  color: red;
 }
 </style>

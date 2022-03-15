@@ -1,7 +1,5 @@
 <template>
-    <span class="badge badge-pill badge-success" v-if="this.nombre">Bienvenido, {{this.nombre}}</span>
-    <span class="badge badge-pill badge-danger" v-if="!this.nombre">No estas registrado</span>
-    <span class="badge badge-pill badge-warning">es {{this.valor}}</span>
+    <h2>{{categoria}}</h2>
   <div class="container fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
@@ -29,36 +27,24 @@
 
 <script>
 export default {
-  name: 'InicioMW',
+  name: 'CategoriaEspecifica',
   data () {
     return {
-      // user: [],
       sitios: [],
-      valor: '',
-      nombre: ''
+      categoria: this.$route.params.id
     }
   },
   created: function () {
     this.traersitios()
-    this.valor = localStorage.getItem('valor')
-    this.nombre = localStorage.getItem('nombre')
   },
   methods: {
-    /* async traerdatos () {
+    traersitios () {
       const formdata = new FormData()
-      formdata.append('id', this.valor)
-      await fetch('http://localhost/mwreservation/traerdatos.php', {
+      formdata.append('cat', this.$route.params.id)
+      fetch('http://localhost/mwreservation/categoriaEspecifica.php', {
         method: 'POST',
         body: formdata
       }).then(
-        respuesta => respuesta.json()
-      ).then((datosRespuesta) => {
-        console.log(datosRespuesta)
-        this.user = datosRespuesta[0]
-      }).catch(console.log)
-    }, */
-    async traersitios () {
-      await fetch('http://localhost/mwreservation/home.php').then(
         respuest => respuest.json()
       ).then((datosRespuest) => {
         console.log(datosRespuest)
@@ -71,6 +57,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .fo{
   padding-bottom: 50px;

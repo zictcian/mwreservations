@@ -19,7 +19,9 @@ export default {
   name: 'HomeMW',
   methods: {
     casa () {
-      localStorage.setItem('valor', '0')
+      if (localStorage.getItem('valor') === null) {
+        localStorage.setItem('valor', '0')
+      }
       this.$router.push({ name: 'InicioMW' })
     }
   }
