@@ -2,14 +2,14 @@
 <div>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <nav class="navbar navbar-expand navbar-light">
-      <a href="/"><img src="../assets/logoReservations.png" alt="" width="100px"></a>
-      <div class=""><input class="typeahead form-control" type="text" placeholder="Search place"></div>
-      <button class="btn"><i class="fa fa-search"></i></button>
+      <a href="/"><i class="bi bi-house-fill colore" style="font-size: 1.5rem;color:black"></i></a>
+      <div class=""><input v-model="busqueda" class="typeahead form-control" type="text" placeholder="Search place"></div>
+      <button class="btn" v-on:click="buscar"><i class="fa fa-search"></i></button>
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a href="/inicio" class="nav-link"><i class="bi bi-house-fill colore"></i></a>
+              <a href="/inicio" class="nav-link"><i class="bi bi-shop-window colore"></i></a>
             </li>
             <li class="nav-item">
               <a href="/fav" class="nav-link"><i class="bi bi-heart-fill colore"></i>Favoritos</a>
@@ -38,7 +38,22 @@
 
 <script>
 export default {
-  name: 'NavMW'
+  name: 'NavMW',
+  data () {
+    return {
+      busqueda: ''
+    }
+  },
+  methods: {
+    async buscar () {
+      if (this.busqueda !== '') {
+        await this.$router.push({ name: 'BusquedaEspecificaMW', params: { id: this.busqueda }, replace: true })
+        this.$router.go(0)
+      } else {
+        alert('ingresa una palabra a buscar')
+      }
+    }
+  }
 }
 </script>
 
@@ -62,7 +77,7 @@ export default {
   background-color: green;
 }
 .nav-item:hover{
-  color: blue;
+  color: black;
   background-color: lightgray;
   text-decoration: underline;
 }

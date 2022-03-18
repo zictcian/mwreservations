@@ -1,5 +1,5 @@
 <template>
-    <h1 v-if="sitios== ''">No hay sitios de {{categoria}}</h1>
+    <h1 v-if="sitios== ''">No hay sitios sobre "{{busqueda}}"</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
   <div class="container fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
@@ -8,7 +8,7 @@
       <div class="card-body bodycard">
         <h5 class="card-title">{{sitio.nombre}}</h5>
         <p class="card-text textocard">{{sitio.descripcion}}</p>
-        <button v-on:click="ir(sitio.id, sitio.nombre)" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</button>
+        <a href="#" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</a>
       </div>
       <div class="card-footer">
       <small v-if="1" class="text-muted">Abierto</small> <br>
@@ -28,38 +28,21 @@
 
 <script>
 export default {
-  name: 'CategoriaEspecifica',
+  name: 'BusquedaEspecificaMW',
   data () {
     return {
       sitios: [],
-      categoria: this.$route.params.id
+      busqueda: this.$route.params.id
     }
   },
   created: function () {
     this.traersitios()
   },
   methods: {
-    encryp: function (palabra) {
-      const palabraencryp = btoa(palabra)
-      console.log(palabra)
-      console.log(palabraencryp)
-      return palabraencryp
-    },
-    desencryp: function (palabra) {
-      const palabradesencryp = atob(palabra)
-      console.log(palabra)
-      console.log(palabradesencryp)
-      return palabradesencryp
-    },
-    async ir (dato, nombre) {
-      dato = this.encryp(dato)
-      await this.$router.push({ name: 'TarjetaMW', params: { nombre: nombre, id: dato } })
-      this.$router.go(0)
-    },
     traersitios () {
       const formdata = new FormData()
-      formdata.append('cat', this.$route.params.id)
-      fetch('http://localhost/mwreservation/categoriaEspecifica.php', {
+      formdata.append('busqueda', this.$route.params.id)
+      fetch('http://localhost/mwreservation/busquedaEspecifica.php', {
         method: 'POST',
         body: formdata
       }).then(

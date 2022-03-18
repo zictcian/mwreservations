@@ -1,7 +1,11 @@
 <template>
-    <span class="badge badge-pill badge-success" v-if="this.nombre">Bienvenido, {{this.nombre}}</span>
-    <span class="badge badge-pill badge-danger" v-if="!this.nombre">No estas registrado</span>
-    <span class="badge badge-pill badge-warning">es {{this.valor}}</span>
+<head>
+  <meta charset="utf-8">
+</head>
+<div v-if="this.nombre" class="alert alert-success" role="alert">Bienvenido, {{this.nombre}}</div>
+<div v-if="!this.nombre" class="alert alert-danger" role="alert">
+No estas registrado
+</div>
   <div class="container fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
@@ -9,7 +13,7 @@
       <div class="card-body bodycard">
         <h5 class="card-title">{{sitio.nombre}}</h5>
         <p class="card-text textocard">{{sitio.descripcion}}</p>
-        <a href="#" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</a>
+        <button v-on:click="ir(sitio.id, sitio.nombre)" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</button>
       </div>
       <div class="card-footer">
       <small v-if="1" class="text-muted">Abierto</small> <br>
@@ -44,19 +48,11 @@ export default {
     this.nombre = localStorage.getItem('nombre')
   },
   methods: {
-    /* async traerdatos () {
-      const formdata = new FormData()
-      formdata.append('id', this.valor)
-      await fetch('http://localhost/mwreservation/traerdatos.php', {
-        method: 'POST',
-        body: formdata
-      }).then(
-        respuesta => respuesta.json()
-      ).then((datosRespuesta) => {
-        console.log(datosRespuesta)
-        this.user = datosRespuesta[0]
-      }).catch(console.log)
-    }, */
+    async ir (dato, nombre) {
+      dato = this.encryp(dato)
+      await this.$router.push({ name: 'TarjetaMW', params: { nombre: nombre, id: dato } })
+      this.$router.go(0)
+    },
     async traersitios () {
       await fetch('http://localhost/mwreservation/home.php').then(
         respuest => respuest.json()
@@ -67,6 +63,18 @@ export default {
           this.sitios = datosRespuest
         }
       }).catch(console.log)
+    },
+    encryp: function (palabra) {
+      const palabraencryp = btoa(palabra)
+      console.log(palabra)
+      console.log(palabraencryp)
+      return palabraencryp
+    },
+    desencryp: function (palabra) {
+      const palabradesencryp = atob(palabra)
+      console.log(palabra)
+      console.log(palabradesencryp)
+      return palabradesencryp
     }
   }
 }
@@ -95,7 +103,8 @@ export default {
 }
 .textocard{
   height: 130px;
-  overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: left;
 }
 .estrella{

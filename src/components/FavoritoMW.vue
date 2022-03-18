@@ -1,13 +1,15 @@
 <template>
-    <h1>Sitios favoritos</h1>
+    <h1>Sitios favoritos <hr></h1>
     <div class="container fo">
+    <h1 v-if="sitios== ''">No hay sitios registrados</h1>
+    <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
       <img class="card-img-top" :src="sitio.logo" alt="Card image cap">
       <div class="card-body bodycard">
         <h5 class="card-title">{{sitio.nombre}}</h5>
         <p class="card-text textocard">{{sitio.descripcion}}</p>
-        <a href="#" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</a>
+        <button v-on:click="ir(sitio.id, sitio.nombre)" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</button>
       </div>
       <div class="card-footer">
       <small v-if="1" class="text-muted">Abierto</small> <br>
@@ -38,6 +40,23 @@ export default {
     this.traersitios()
   },
   methods: {
+    encryp: function (palabra) {
+      const palabraencryp = btoa(palabra)
+      console.log(palabra)
+      console.log(palabraencryp)
+      return palabraencryp
+    },
+    desencryp: function (palabra) {
+      const palabradesencryp = atob(palabra)
+      console.log(palabra)
+      console.log(palabradesencryp)
+      return palabradesencryp
+    },
+    async ir (dato, nombre) {
+      dato = this.encryp(dato)
+      await this.$router.push({ name: 'TarjetaMW', params: { nombre: nombre, id: dato } })
+      this.$router.go(0)
+    },
     traersitios () {
       const formdata = new FormData()
       formdata.append('IdUsua', localStorage.getItem('valor'))
@@ -82,7 +101,8 @@ export default {
 }
 .textocard{
   height: 130px;
-  overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: left;
 }
 .estrella{

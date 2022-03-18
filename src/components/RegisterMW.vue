@@ -52,7 +52,19 @@ export default {
     }
   },
   methods: {
-    postData () {
+    encryp: async function (palabra) {
+      const palabraencryp = btoa(palabra)
+      console.log(palabra)
+      console.log(palabraencryp)
+      return palabraencryp
+    },
+    desencryp: function (palabra) {
+      const palabradesencryp = atob(palabra)
+      console.log(palabra)
+      console.log(palabradesencryp)
+      return palabradesencryp
+    },
+    async postData () {
       this.passwordError2 = ''
       if (this.email === '') {
         this.passwordError2 = this.passwordError2 + ' *El correo es obligatorio'
@@ -72,10 +84,29 @@ export default {
         this.passwordError2 = this.passwordError2 + ' *Las contraseñas deben coincidir'
       }
       if (this.passwordError2 === '') {
-        this.register()
+        this.password = await this.encryp(this.password)
+        this.prueba()
       } else {
-        alert('Error detectado')
+        this.$swal('error', 'Se detecto una inconsistencia', 'info')
       }
+    },
+    prueba () {
+      this.$swal.fire({
+        title: 'Verfificación',
+        text: '¿Tus datos ya están verificados?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then((result) => {
+        if (result.value) {
+          this.register()
+        } else {
+          this.$swal('Cancelado', 'operación cancelada', 'info')
+        }
+      })
     },
     async register () {
       const formdata = new FormData()
@@ -92,14 +123,14 @@ export default {
       ).then((datosRespuest) => {
         console.log(datosRespuest)
         if (datosRespuest === 'error') {
-          alert('el correo ya esta registrado')
+          this.$swal('Creación cancelada', 'El correo ya esta registrado', 'info')
         } else {
-          alert('usuario creado')
+          this.$swal('Usuario creado', 'Ahora, inicia sesión', 'success')
           this.$router.push({ name: 'LoginMW', params: { email: this.email } })
         }
       }).catch(e => {
         console.log(e)
-        alert('Error al crear')
+        this.$swal('Cancelado', 'operación cancelada', 'info')
       })
     }
   }

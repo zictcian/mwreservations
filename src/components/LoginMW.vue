@@ -30,10 +30,23 @@ export default {
     }
   },
   methods: {
+    encryp: async function (palabra) {
+      const palabraencryp = btoa(palabra)
+      console.log(palabra)
+      console.log(palabraencryp)
+      return palabraencryp
+    },
+    desencryp: function (palabra) {
+      const palabradesencryp = atob(palabra)
+      console.log(palabra)
+      console.log(palabradesencryp)
+      return palabradesencryp
+    },
     async login () {
       const formdata = new FormData()
       formdata.append('correo', this.email)
-      formdata.append('pass', this.password)
+      const pass = await this.encryp(this.password)
+      formdata.append('pass', pass)
       await fetch('http://localhost/mwreservation/login.php', {
         method: 'POST',
         body: formdata
@@ -61,7 +74,7 @@ export default {
       if (this.error != null && this.error === false) {
         this.$router.push({ name: 'InicioMW' })
       } else {
-        alert('Acceso denegado')
+        this.$swal('Alerta', 'Acceso denegado', 'info')
       }
     }
   }

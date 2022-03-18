@@ -1,5 +1,6 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <img alt="Vue logo" src="../assets/logo.png">
+    <h1>Sitio Creado con vue.js</h1>
   </div>
 </template>

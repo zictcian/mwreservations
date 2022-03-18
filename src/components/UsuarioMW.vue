@@ -29,9 +29,8 @@
         </div>
         <div class="inputwigth error"><span class="" v-if="passwordError2">{{passwordError2}}</span></div>
         <div class="btn-group inputwigth" role="group" aria-label="Basic example">
-        <button v-on:Click="disabled = !disabled" :disabled="correo != ''" class="btn btn-primary mb-2">Editar</button>
+        <button v-on:Click="disabled = !disabled" :disabled="!email" class="btn btn-primary mb-2">Editar</button>
         <button :disabled="disabled" v-on:Click="postData" class="btn btn-primary mb-2">Modificar</button>
-        <button :disabled="!disabled" v-on:Click="postData" class="btn btn-primary mb-2">click</button>
         </div>
     </div>
     <div class="container-fluid cesion">
@@ -65,16 +64,36 @@ export default {
   },
   methods: {
     exit () {
-      this.$router.push({ path: '/' })
-      localStorage.setItem('valor', '')
-      localStorage.setItem('nombre', '')
-      localStorage.setItem('Apaterno', '')
-      localStorage.setItem('Amaterno', '')
-      localStorage.setItem('correo', '')
-      localStorage.setItem('c', '')
-      alert('Vuelve pronto')
+      this.$swal.fire({
+        title: '¡¡ ¿Te quieres quedar? !!',
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        background: '#fff',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("https://sweetalert2.github.io/images/nyan-cat.gif")
+          left top
+          no-repeat
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then((result) => {
+        if (!result.value) {
+          localStorage.setItem('valor', '0')
+          localStorage.setItem('nombre', '')
+          localStorage.setItem('Apaterno', '')
+          localStorage.setItem('Amaterno', '')
+          localStorage.setItem('correo', '')
+          localStorage.setItem('c', '')
+          this.$router.push({ path: '/' })
+        }
+      })
     },
-    postData () {
+    async postData () {
       this.passwordError2 = ''
       if (this.email === '') {
         this.passwordError2 = this.passwordError2 + ' *El correo es obligatorio'
@@ -90,48 +109,83 @@ export default {
       } else if (this.password === this.nombre) {
         this.passwordError2 = this.passwordError2 + ' *El password no puede ser el nombre'
       }
-      if (localStorage.getItem('c') !== this.passwordActual) {
+      const passActual = await this.encryp(this.passwordActual)
+      if (localStorage.getItem('c') !== passActual) {
         this.passwordError2 = this.passwordError2 + ' *La contraseña actual es erronea'
       }
       if (this.passwordError2 === '') {
-        this.register()
+        this.prueba()
       } else {
-        alert('Error detectado')
+        this.$swal('error', 'Se detecto una inconsistencia', 'info')
       }
     },
-    async register () {
-      const formdata = new FormData()
-      formdata.append('idUsua', localStorage.getItem('valor'))
-      formdata.append('correo', this.email)
-      formdata.append('password', this.password)
-      formdata.append('nombre', this.nombre)
-      formdata.append('Apaterno', this.Apaterno)
-      formdata.append('Amaterno', this.Amaterno)
-      formdata.append('validacion', this.passwordActual)
-      await fetch('http://localhost/mwreservation/cambiardatos.php', {
-        method: 'POST',
-        body: formdata
-      }).then(
-        respuest => respuest.json()
-      ).then((datosRespuest) => {
-        console.log(datosRespuest)
-        if (datosRespuest != null) {
-          this.error = false
-          localStorage.setItem('valor', datosRespuest.id)
-          localStorage.setItem('nombre', datosRespuest.nombre)
-          localStorage.setItem('Apaterno', datosRespuest.Apaterno)
-          localStorage.setItem('Amaterno', datosRespuest.Amaterno)
-          localStorage.setItem('correo', datosRespuest.correo)
-          localStorage.setItem('c', datosRespuest.passencryp)
-          alert('usuario modificado')
-          this.$router.push({ path: '/' })
+    encryp: async function (palabra) {
+      const palabraencryp = btoa(palabra)
+      console.log(palabra)
+      console.log(palabraencryp)
+      return palabraencryp
+    },
+    desencryp: function (palabra) {
+      const palabradesencryp = atob(palabra)
+      console.log(palabra)
+      console.log(palabradesencryp)
+      return palabradesencryp
+    },
+    prueba () {
+      this.$swal.fire({
+        title: 'Verfificación',
+        text: '¿Quieres alterar tus datos pesonales?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then((result) => {
+        if (result.value) {
+          this.register()
         } else {
-          alert('el correo ya esta registrado')
+          this.$swal('Cancelado', 'operación cancelada', 'info')
         }
-      }).catch(e => {
-        console.log(e)
-        alert('Error al modificar')
       })
+    },
+    async register () {
+      const pass = await this.encryp(this.password)
+      const passActual = await this.encryp(this.passwordActual)
+      if (localStorage.getItem('c') === passActual) {
+        const formdata = new FormData()
+        formdata.append('idUsua', localStorage.getItem('valor'))
+        formdata.append('correo', this.email)
+        formdata.append('password', pass)
+        formdata.append('nombre', this.nombre)
+        formdata.append('Apaterno', this.Apaterno)
+        formdata.append('Amaterno', this.Amaterno)
+        formdata.append('validacion', passActual)
+        await fetch('http://localhost/mwreservation/cambiardatos.php', {
+          method: 'POST',
+          body: formdata
+        }).then(
+          respuest => respuest.json()
+        ).then((datosRespuest) => {
+          console.log(datosRespuest)
+          if (datosRespuest != null) {
+            this.error = false
+            localStorage.setItem('valor', datosRespuest.id)
+            localStorage.setItem('nombre', datosRespuest.nombre)
+            localStorage.setItem('Apaterno', datosRespuest.Apaterno)
+            localStorage.setItem('Amaterno', datosRespuest.Amaterno)
+            localStorage.setItem('correo', datosRespuest.correo)
+            localStorage.setItem('c', datosRespuest.passencryp)
+            this.$swal('Usuario alterado', 'Modificacion de datos personales', 'success')
+            this.$router.push({ path: '/inicio' })
+          } else {
+            this.$swal('Error', 'Contraseña actual no es correcta', 'error')
+          }
+        }).catch(e => {
+          console.log(e)
+          this.$swal('Error', 'error al modificar', 'error')
+        })
+      }
     }
   }
 }
@@ -173,7 +227,7 @@ body{
   background-color: antiquewhite;
   align-content: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 25px;
   margin-left: 15%;
   margin-right: 15%;
 }

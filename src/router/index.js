@@ -9,7 +9,20 @@ import CategoriaEspecifica from '@/components/CategoriaEspecifica.vue'
 import FavoritoMW from '@/components/FavoritoMW.vue'
 import UsuarioMW from '@/components/UsuarioMW.vue'
 import CarritoMW from '@/components/CarritoMW.vue'
+import BusquedaSitio from '@/components/BusquedaSitio.vue'
+import TarjetaMW from '@/components/TarjetaMW.vue'
+import NotFoundMW from '@/components/NotFound.vue'
 const routes = [
+  {
+    path: '/sitio/:nombre/:id',
+    name: 'TarjetaMW',
+    component: TarjetaMW
+  },
+  {
+    path: '/busqueda/:id',
+    name: 'BusquedaEspecificaMW',
+    component: BusquedaSitio
+  },
   {
     path: '/carrito',
     name: 'CarritoMW',
@@ -69,6 +82,11 @@ const routes = [
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
     }
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFoundMW
   }
 ]
 

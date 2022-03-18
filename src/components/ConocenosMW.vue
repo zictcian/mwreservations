@@ -39,7 +39,8 @@
     </div>
     <button class="boton">
         <center><a class="mw" href="https://mwc.com.mx/">Ir a MWConsultores </a><i class="fa fa-external-link mw"></i></center>
-    </button>
+    </button><br>
+    <img class="espacio" src="https://mwc.com.mx/assets/cursos/1.jpg" alt="">
 </template>
 <script>
 export default {
@@ -61,6 +62,11 @@ h1{
     border-color: black;
     background-color: orange;
     position: relative;
+    width: 45%;
+}
+.espacio{
+    margin-bottom: 220px;
+    padding-top: 50;
 }
 .boton:hover{
     background-color: green;
