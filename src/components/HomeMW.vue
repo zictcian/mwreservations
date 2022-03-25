@@ -19,6 +19,8 @@ export default {
   name: 'HomeMW',
   methods: {
     casa () {
+      localStorage.setItem('zona', '')
+      localStorage.setItem('zonaname', '')
       if (localStorage.getItem('valor') === null) {
         localStorage.setItem('valor', '0')
       }

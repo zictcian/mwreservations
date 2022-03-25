@@ -7,6 +7,8 @@
 No estas registrado
 </div>
   <div class="container fo">
+    <h1 v-if="sitios== ''">No hay sitios registrados en {{zonanombre}}</h1>
+    <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
       <img class="card-img-top" :src="sitio.logo" alt="Card image cap">
@@ -37,6 +39,7 @@ export default {
   data () {
     return {
       // user: [],
+      zonanombre: localStorage.getItem('zonaname'),
       sitios: [],
       valor: '',
       nombre: ''
@@ -54,7 +57,12 @@ export default {
       this.$router.go(0)
     },
     async traersitios () {
-      await fetch('http://localhost/mwreservation/home.php').then(
+      const formdata = new FormData()
+      formdata.append('idZona', localStorage.getItem('zona'))
+      await fetch('http://localhost/mwreservation/home.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
         respuest => respuest.json()
       ).then((datosRespuest) => {
         console.log(datosRespuest)
@@ -82,13 +90,6 @@ export default {
 <style scoped>
 .fo{
   padding-bottom: 50px;
-}
-.col{
-  padding-left: 5%;
-  margin-left: 5%;
-  padding-right: 5%;
-  margin-right: 5%;
-  margin-bottom: 5%;
 }
 
 .gallery-outer{

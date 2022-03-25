@@ -1,4 +1,5 @@
 <template>
+<button v-on:click="irareservar" class="btn btn-success reserva"><i class="bi bi-cart-check"></i> Reservar </button>
     <h1>{{sitios.nombre}}</h1>
     <div class="container fo">
     <h1 v-if="sitios== ''">No hay sitios registrados</h1>
@@ -9,10 +10,10 @@
       <img class="card-img-top" :src="sitios.logo" alt="Card image cap">
       <div class="card-body bodycard">
         <h3>- {{sitios.categoria}} -</h3>
-        <button v-on:click="prueba" class="btn btn-primary"><a style="color:white">Ir a reservar</a></button>
+        <button v-on:click="hacerpdf('comentario','70','2022/02/02','08:22','2')" class="btn valorar btn-primary" style="margin-top: 10px"><h6>Pruebas</h6></button>
+        <button v-on:click="nuevavaloracion" class="btn valorar btn-primary" style="margin-top: 10px"><h5>Valorar sitio</h5></button>
       </div>
       <div class="card-footer">
-        <button class="btn valorar">Valorar</button><br>
       {{sitios.ponderacion}} estrellas
       <div class="Row">
         <div v-for="n in 5" :key="n" class="gallery-outer">
@@ -25,8 +26,8 @@
     </div>
     <div class="card espacio" style="">
   <div class="card-header textocard">
-    <button v-show="!confirmfav" v-on:click="prueba" class="btn add"><a><i class="bi bi-heart" style="color:black"></i> Agregar a favoritos</a></button>
-    <button v-show="confirmfav" v-on:click="prueba" class="btn add"><a><i class="bi bi-heart-fill" style="color:red"></i> Eliminar de favoritos</a></button>
+    <button v-show="!confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart" style="color:black"></i> Agregar a favoritos</a></button>
+    <button v-show="confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart-fill" style="color:red"></i> Eliminar de favoritos</a></button>
     </div>
   <div class="card-body">
     <h5 class="card-title">Datos de descripción</h5>
@@ -65,7 +66,7 @@
       <div class="titulos" style="width:400px;">
         Catalogo
         <ol>
-        <li value="0" v-if="false"></li>
+        <li value="0" v-show="catalogos == ''">Sin imagenes registradas</li>
         <li v-for="(catalogo, index) in catalogos" :key="index">{{catalogo.title}}</li>
         </ol>
       </div>
@@ -86,33 +87,69 @@
       <img v-show="index == this.dato"  class="imagen" :src="catalogo.link" alt=""></transition>
     </div>
   </div>
-
+  <div class="comentarios">
+    <h2>Comentarios de los clientes</h2>
+    <hr style="top:0%">
+    <h3 v-show="comentarios == ''">Sin Comentarios</h3>
   <ul v-show="comentarios" class="list-unstyled">
-  <li class="media tarjetas" v-for="(comentario, index) in comentarios" :key="comentario.id">
+  <li v-show="numcomentarios > index" class="media tarjetas" v-for="(comentario, index) in comentarios" :key="index">
     <img class="mr-3 logo" :src="comentario.foto" alt="Generic placeholder image">
-    <div class="media-body" style="background-color:white;margin-right: 10px;">
-       <div class="Row">
-        <h3 class="mt-0 mb-1">{{index+1}}° comentario de {{comentario.nombre}}</h3>
-        <h2 class="gallery-outer">{{comentario.valoracion}} estrellas</h2>
-        <div v-for="n in 5" :key="n" class="gallery-outer">
-        <i v-if="comentario.valoracion>=n" class="bi bi-star-fill estrella" style="font-size: 2rem;"></i>
-        <i v-else-if="comentario.valoracion%1!=0 && n-1<comentario.valoracion" class="bi bi-star-half estrella" style="font-size: 2rem;"></i>
-        <i v-else class="bi bi-star estrella" style="font-size: 2rem;"></i>
+    <div class="media-body" style="margin-right: 10px;">
+       <i class="bi bi-bookmark-check" style="top:0%;margin-top:0%">Cuenta verificada</i>
+       <div class="row" style="margin-left:3px">
+        <h6 class="mt-0 mb-1" style="text-align:left;width:200px">{{comentario.nombre}} {{comentario.Apaterno}} {{comentario.Amaterno}}</h6>
+        <p class="">{{comentario.valoracion}} estrellas {</p>
+        <div v-for="n in 5" :key="n" class="gallery-outer" style="">
+        <i v-if="comentario.valoracion>=n" class="bi bi-star-fill estrella" style="font-size: 1rem;"></i>
+        <i v-else-if="comentario.valoracion%1!=0 && n-1<comentario.valoracion" class="bi bi-star-half estrella" style="font-size: 1rem;"></i>
+        <i v-else class="bi bi-star estrella" style="font-size: 1rem;"></i>
       </div>
+                                                                            <p class="gallery-outer">}</p>
+  <p style="margin-left:10%">{{comentario.fecha.split(' ')[0].split('-')[2]}}/{{comentario.fecha.split(' ')[0].split('-')[1]}}/{{comentario.fecha.split(' ')[0].split('-')[0]}} {{comentario.fecha.split(' ')[1]}}</p>
       </div>
-      <hr>
-      {{comentario.Mensaje}}
+      <div class="cuerpotarjeta">{{comentario.Mensaje}}</div>
       </div>
   </li>
+  <div>
+    <button class="btn more" v-show="this.comentarios.length > numcomentarios" v-on:click="actualizarcomentarios">mostrar más</button>
+    <button class="btn more" v-show="numcomentarios > 3" v-on:click="actualizarcomentarios2">mostrar menos</button>
+    </div>
   </ul>
+  </div>
+  </div>
+  <div class="container fo">
+    <h2 style="margin-top:25px">Otros sitios similares</h2>
+    <hr>
+  <div class="gallery-outer" v-for="otrositio in otrositios" :key="otrositio.id">
+    <div class="card p-3" style="width: 18rem;">
+      <img class="card-img-top" :src="otrositio.logo" alt="Card image cap">
+      <div class="card-body bodycard2">
+        <h5 class="card-title">{{otrositio.nombre}}</h5>
+      </div>
+      <button v-on:click="ir(otrositio.id, otrositio.nombre)" class="btn btn-primary">Reserva por ${{otrositio.anticipo}}</button>
+      <div class="card-footer">
+      {{otrositio.ponderacion}} estrellas
+      <div class="Row">
+        <div v-for="n in 5" :key="n" class="gallery-outer">
+        <i v-if="otrositio.ponderacion>=n" class="bi bi-star-fill estrella"></i>
+        <i v-else-if="otrositio.ponderacion%1!=0 && n-1<otrositio.ponderacion" class="bi bi-star-half estrella"></i>
+        <i v-else class="bi bi-star estrella"></i>
+      </div>
+      </div>
+    </div>
+    </div>
+  </div>
   </div>
 </template>
 
 <script>
+import JsPDF from 'jspdf'
+// import VueQr from 'vue-qr/src/packages/vue-qr.vue'
 export default {
   name: 'TarjetaMW',
   data () {
     return {
+      numcomentarios: 3,
       confirmfav: '',
       dato: 0,
       catalogos: [],
@@ -120,40 +157,151 @@ export default {
       sitios: [{
         horario: ''
       }],
-      nombre: this.$route.params.id,
+      otrositios: [],
+      nombre: this.$route.params.nombre,
       id: this.$route.params.id,
-      dias: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo']
+      dias: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'],
+      options: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
     }
   },
   created: async function () {
     await this.traersitios()
   },
   methods: {
+    hacerpdf (comentario, minutosR, fecha, hora, personas) {
+      const doc = new JsPDF()
+      const imgData = new Image()
+      imgData.src = 'https://media.istockphoto.com/photos/-picture-id1311690310'
+      doc.addImage(imgData, 'png', 120, 20, 70, 50, 'mono')
+      doc.setFont('Verdana')
+      doc.setFontSize(22)
+      doc.text(20, 20, 'MWReservation ')
+      doc.setFont('Arial')
+      doc.setFontSize(14)
+      doc.text(20, 30, 'Comentarios: ' + comentario)
+      doc.text(20, 40, 'Tiempo reservado: ' + minutosR + ' minutos')
+      doc.text(20, 50, 'Fecha reservada: ' + new Date(fecha).toLocaleDateString('es-ES', this.options))
+      doc.text(20, 60, 'Hora reservada: ' + hora)
+      doc.text(20, 70, 'Lugares reservados: ' + personas)
+      doc.text(20, 80, 'Reservacion realizada por: ' + localStorage.getItem('nombre') +
+      ' ' + localStorage.getItem('Apaterno') + ' ' + localStorage.getItem('Amaterno'))
+      doc.addPage()
+      doc.text(20, 20, 'Te gusto la aplicación?')
+      window.open(URL.createObjectURL(doc.output('blob')))
+      // doc.save('Test.pdf')
+    },
+    async ir (dato, nombre) {
+      dato = this.encryp(dato)
+      await this.$router.push({ name: 'TarjetaMW', params: { nombre: nombre, id: dato } })
+      this.$router.go(0)
+    },
+    async irareservar () {
+      await this.$router.push({ name: 'ReservacionMW', params: { nombre: this.nombre, id: this.id } })
+      this.$router.go(0)
+    },
+    actualizarcomentarios () {
+      this.numcomentarios = this.numcomentarios + 3
+    },
+    actualizarcomentarios2 () {
+      this.numcomentarios = this.numcomentarios - 3
+    },
     mover (n) {
       this.dato = n
       console.log(n, this.dato)
     },
-    prueba () {
+    nuevavaloracion () {
       this.$swal.fire({
-        title: 'Alerta',
-        text: '¿Quieres guardar este sitio en favoritos?',
-        type: 'warning',
+        title: 'Escribe tu comentario',
+        html: `
+  <div class="input-group">
+  <div class="input-group-prepend">
+  <span class="input-group-text">Comentario</span>
+  </div>
+  <textarea id="input1" class="form-control" aria-label="With textarea"></textarea>
+  </div>
+  <br>
+  <label>Clasificación por estrellas</label>
+  <p class="clasificacion">
+    <input id="radio1" type="radio" name="estrellas" value="1"><!--
+    --><label for="radio1" onclick="document.getElementById('valor').style.display = 'none';">★</label><!--
+    --><input id="radio2" type="radio" name="estrellas" value="2"><!--
+    --><label for="radio2" onclick="document.getElementById('valor').style.display = 'inline';">★</label><!--
+    --><input id="radio3" type="radio" name="estrellas" value="3"><!--
+    --><label for="radio3" onclick="document.getElementById('valor').style.display = 'inline';">★</label><!--
+    --><input id="radio4" type="radio" name="estrellas" value="4"><!--
+    --><label for="radio4" onclick="document.getElementById('valor').style.display = 'inline';">★</label><!--
+    --><input id="radio5" type="radio" name="estrellas" value="5"><!--
+    --><label for="radio5" onclick="document.getElementById('valor').style.display = 'inline';">★</label>
+  </p><label id="valor">Decimales: <input type="number" min="0" max="9" id="numero" value="0"></label>
+  <style scoped>
+  input[type = "radio"]{ display:none;}
+label{ color:grey;}
+.clasificacion{
+      direction: rtl;/* right to left */
+      unicode-bidi: bidi-override;/* bidi de bidireccional */
+  }
+  label:hover{color:orange;}
+  label:hover ~ label{color:orange;}
+  input[type = "radio"]:checked ~ label{color:orange;}
+  </style>`,
         showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No',
-        showCloseButton: true,
-        showLoaderOnConfirm: true
-      }).then((result) => {
-        if (result.value) {
-          const us = localStorage.getItem('valor')
-          console.log(us)
-          if (us !== '0') {
-            this.addfav()
+        confirmButtonText: 'Comentar',
+        showLoaderOnConfirm: true,
+        preConfirm: function () {
+          const memo = document.getElementsByName('estrellas')
+          let memory
+          for (let i = 0; i < memo.length; i++) {
+            if (memo[i].checked) {
+              memory = 5 - i
+            }
+          }
+          if (typeof memory === 'undefined') {
+            memory = 0
+          }
+          return [
+            document.getElementById('input1').value,
+            memory,
+            document.getElementById('numero').value
+          ]
+        },
+        allowOutsideClick: () => !this.$swal.isLoading()
+      }).then(async (result) => {
+        console.log(result.value)
+        const comen = result.value[0]
+        const ponde = result.value[1] + '.' + result.value[2]
+        console.log(ponde)
+        if (comen !== '') {
+          if (ponde <= 5 && ponde >= 0) {
+            const usua = localStorage.getItem('valor')
+            if (usua !== '0') {
+              const sit = await this.desencryp(this.id)
+              const formdata = new FormData()
+              formdata.append('IdSitio', sit)
+              formdata.append('IdUsua', usua)
+              formdata.append('comentario', comen)
+              formdata.append('ponderacion', ponde)
+              fetch('http://localhost/mwreservation/agregarcomentario.php', {
+                method: 'POST',
+                body: formdata
+              }).then(
+                respuest => respuest.json()
+              ).then((datosRespuest) => {
+                console.log('dato', datosRespuest)
+                if (datosRespuest !== 'error') {
+                  this.traerComentarios()
+                  this.$swal('valoración exitosa', 'Comentario realizado', 'success')
+                } else {
+                  this.$swal('Error de carga', 'Comentario no realizado', 'error')
+                }
+              }).catch(console.log)
+            } else {
+              this.$swal('Inicia sesión', 'operación anulada', 'info')
+            }
           } else {
-            this.$swal('Inicia sesión', 'operación anulada', 'info')
+            this.$swal('ingresa una ponderacion valida', 'valores aceptados del 0 al 5', 'info')
           }
         } else {
-          this.$swal('Cancelado', 'operación cancelada', 'info')
+          this.$swal('error de comentario', 'Es requerido contar con un comentario', 'info')
         }
       })
     },
@@ -189,6 +337,7 @@ export default {
           this.traercatalogo()
           this.traerComentarios()
           this.validarFav()
+          this.traerotrositios()
         }
       }).catch(console.log)
     },
@@ -216,7 +365,7 @@ export default {
           }
         }).catch(console.log)
       } else {
-        this.prueba()
+        this.$swal('Inicia sesión', 'operación anulada', 'info')
       }
     },
     async validarFav () {
@@ -243,6 +392,23 @@ export default {
           }
         }).catch(console.log)
       }
+    },
+    async traerotrositios () {
+      const formdata = new FormData()
+      const sit = await this.desencryp(this.id)
+      formdata.append('IdSitio', sit)
+      await fetch('http://localhost/mwreservation/home2.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        this.otrositios = []
+        if (typeof datosRespuest[0].success === 'undefined') {
+          this.otrositios = datosRespuest
+        }
+      }).catch(console.log)
     },
     async traercatalogo () {
       const sit = await this.desencryp(this.id)
@@ -299,21 +465,42 @@ export default {
   margin-right: 5%;
   margin-bottom: 5%;
 }
+.comentarios{
+  align-items: left;
+  padding-left: 0px;
+  width: 1080px;
+  padding-bottom: 50px;
+  background:white
+}
+.more{
+  box-decoration-break: none;
+}
+.more:hover{
+  text-decoration: underline;
+}
+
 .logo{
   border-radius: 50%;
-  background-color: black;
-  width: 150px;
-  height: 150px;
+  width: 50px;
+  height: 50px;
   margin: 10px;
 }
+.cuerpotarjeta{
+  height: 55px;
+  text-align: justify;
+  text-overflow: ellipsis;
+  align-content: left;
+  align-items: left;
+}
+.cabezatarjeta{
+}
 .tarjetas{
-  background-color: lightgrey;
   position:relative;
-  width: 1085px;
+  height: 125px;
+  width: 1000px;
   margin-bottom: 25px;
   border-radius: 0%;
-  align-items: center;
-  text-overflow: ellipsis;
+  text-align: justify;
 }
 .gallery-outer{
   display: inline-block;
@@ -325,6 +512,11 @@ export default {
 .bodycard{
   height: 150px;
   width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bodycard2{
+  height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -359,7 +551,7 @@ export default {
   contain:size;
   position: relative;
   scroll-snap-type: y mandatory;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 .slidercontrol{
   position:relative;
@@ -380,8 +572,6 @@ export default {
 }
 .valorar:hover{
   text-decoration: underline;
-  color: blueviolet;
-  cursor:grab;
 }
 .sliderlinks{
   border-radius: 50%;
@@ -400,5 +590,15 @@ export default {
 }
 .add:hover{
   text-decoration: underline;
+}
+.reserva{
+  color:white;
+  position: fixed;
+  bottom: 70px;
+  right: 40px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border-color: black;
 }
 </style>

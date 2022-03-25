@@ -60,6 +60,7 @@ export default {
     traersitios () {
       const formdata = new FormData()
       formdata.append('IdUsua', localStorage.getItem('valor'))
+      formdata.append('idZona', localStorage.getItem('zona'))
       fetch('http://localhost/mwreservation/favoritos.php', {
         method: 'POST',
         body: formdata
@@ -80,13 +81,6 @@ export default {
 <style scoped>
 .fo{
   padding-bottom: 50px;
-}
-.col{
-  padding-left: 5%;
-  margin-left: 5%;
-  padding-right: 5%;
-  margin-right: 5%;
-  margin-bottom: 5%;
 }
 
 .gallery-outer{

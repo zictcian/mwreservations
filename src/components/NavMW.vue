@@ -5,6 +5,11 @@
       <a href="/"><i class="bi bi-house-fill colore" style="font-size: 1.5rem;color:black"></i></a>
       <div class=""><input v-model="busqueda" class="typeahead form-control" type="text" placeholder="Search place"></div>
       <button class="btn" v-on:click="buscar"><i class="fa fa-search"></i></button>
+      <select class="custom-select" style="width:300px;margin-left:20px" id="zonaselected">
+                <option selected>{{zonanombre}}</option>
+                <option :value="index" v-for="(zona ,index) in zonas" :key="index">{{index+1}}. {{zona.estado}}</option>
+              </select>
+            <button class="btn" v-on:click="Zonaselec()"><i class="bi bi-arrow-right-circle"></i></button>
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
@@ -41,17 +46,47 @@ export default {
   name: 'NavMW',
   data () {
     return {
-      busqueda: ''
+      busqueda: '',
+      zonas: [],
+      zonafija: localStorage.getItem('zona'),
+      zonanombre: localStorage.getItem('zonaname')
     }
   },
+  created: function () {
+    this.traersitios()
+  },
   methods: {
+    traersitios () {
+      const formdata = new FormData()
+      formdata.append('IdUsua', localStorage.getItem('valor'))
+      fetch('http://localhost/mwreservation/zone.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        this.zonas = []
+        if (typeof datosRespuest[0].success === 'undefined') {
+          this.zonas = datosRespuest
+        }
+      }).catch(console.log)
+    },
     async buscar () {
-      if (this.busqueda !== '') {
+      if (this.busqueda.length > 2) {
         await this.$router.push({ name: 'BusquedaEspecificaMW', params: { id: this.busqueda }, replace: true })
         this.$router.go(0)
       } else {
-        alert('ingresa una palabra a buscar')
+        this.$swal('Sin busqueda', 'ingresa una palabra de 3 o mas caracteres', 'info')
       }
+    },
+    async Zonaselec () {
+      const newzona = document.getElementById('zonaselected').value
+      console.log(newzona)
+      localStorage.setItem('zona', newzona)
+      localStorage.setItem('zonaname', this.zonas[newzona].estado)
+      await this.$router.push({ path: '/inicio', replace: true })
+      this.$router.go(0)
     }
   }
 }
@@ -71,7 +106,7 @@ export default {
   padding: 8px 12px; /* Some padding */
   font-size: 14px; /* Set a font size */
   cursor: pointer; /* Mouse pointer on hover */
-  border-radius: 30%;
+  border-radius: 0%;
 }
 .btn:hover {
   background-color: green;

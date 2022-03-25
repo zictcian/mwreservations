@@ -1,11 +1,10 @@
 <template>
   <div class="contenedor">
-  <div v-for="categoria in categorias" :key="categoria.id" class="card border-success mb-3 gallery-outer" style="max-width: 18rem;">
+  <div v-for="(categoria, index) in categorias" :key="categoria.id" class="card border-dark mb-3 gallery-outer" style="max-width: 18rem;">
   <h5 class="card-header">{{categoria.categoria}}</h5>
-  <div class="card-body">
-    <h5 class="card-title">mwreservation</h5>
-    <p class="card-text">¡¡ Mira todos los sitios que hay !!, ver a ver los sitios de {{categoria.categoria}}s que tenemos para ti y calificalos
-      para mas personas puedan saber tu opinión
+  <div class="card-body tamano">
+    <h6 class="card-title"><span class="badge badge-info"><span class="badge badge-light">#{{index+1}}</span> categoria mwreservation</span></h6>
+    <p class="card-text texto"> {{categoria.desgloze}}
     </p>
     <router-link :to="{ name:'CategoriasMW', params:{id: categoria.categoria} }" class="btn btn-primary">Ver sitios</router-link>
   </div>
@@ -55,5 +54,16 @@ export default {
   vertical-align: left;
   margin-left: 3%;
   margin-top: 2%;
+}
+.tamano{
+  width: 300px;
+  height: 230px;
+  text-align: center;
+}
+.texto{
+  text-align: left;
+  overflow: hidden;
+  width: 240px;
+  height: 100px;
 }
 </style>

@@ -12,7 +12,13 @@ import CarritoMW from '@/components/CarritoMW.vue'
 import BusquedaSitio from '@/components/BusquedaSitio.vue'
 import TarjetaMW from '@/components/TarjetaMW.vue'
 import NotFoundMW from '@/components/NotFound.vue'
+import ReservacionMW from '@/components/ReservacionMW.vue'
 const routes = [
+  {
+    path: '/Reservacion/:nombre/:id',
+    name: 'ReservacionMW',
+    component: ReservacionMW
+  },
   {
     path: '/sitio/:nombre/:id',
     name: 'TarjetaMW',

@@ -12,6 +12,7 @@
             <label for="">Password</label>
             <input v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
+        <button v-on:click="a" class="btn btn1">olvidaste tu contraseña?</button>
         <button v-on:click="login" class="btn btn-primary mb-3">Login</button><br>
         <a href="/register" class="btn1">Eres nuevo? crear cuenta</a>
     </div>
@@ -58,6 +59,7 @@ export default {
         if (datosRespuest != null) {
           this.error = false
           localStorage.setItem('valor', datosRespuest.id)
+          localStorage.setItem('foto', datosRespuest.foto)
           localStorage.setItem('nombre', datosRespuest.nombre)
           localStorage.setItem('Apaterno', datosRespuest.Apaterno)
           localStorage.setItem('Amaterno', datosRespuest.Amaterno)
@@ -106,6 +108,9 @@ body{
   margin-left: 40%;
   text-decoration: underline;
   text-align: center;
+}
+.btn1:hover{
+  color: blue;
 }
 .forma{
   background-color: antiquewhite;

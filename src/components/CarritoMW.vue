@@ -3,13 +3,15 @@
     <div class="container fo">
     <h1 v-if="sitios== ''">No hay sitios registrados</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
+    <div>
+    </div>
   <div class="container">
-    <div class="row" v-for="sitio in sitios" :key="sitio.id">
+    <div class="row" v-for="sitio in sitios" :key="sitio.id" style="margin-bottom: 25px;">
     <div class="card espacio" style="width: 24rem;">
       <img class="card-img-top" :src="sitio.logo" alt="Card image cap">
       <div class="card-body bodycard">
         <h3>Reservacion para {{sitio.personas}} personas</h3>
-        <button :disabled="!sitio.idEstatus=='1'" class="btn btn-primary"><a style="color:white">Ver reservación</a></button>
+        <a :href="sitio.recibo" target="_blank" class="btn btn-primary"><a style="color:white">Ver reservación</a></a>
       </div>
       <div class="card-footer">
       <small v-if="1" class="text-muted">Abierto</small> <br>
@@ -34,33 +36,39 @@
       <tbody class="tablacuerpo" style="background-color:white">
         <tr>
           <td style="width: 150px">Tiempo reservado</td>
-          <td style="width: 550px">{{sitio.MinutosR}} Minutos</td>
+          <td style="width: 550px">{{sitio.minutosR}} Minutos</td>
         </tr>
         <tr>
           <td style="width: 150px">Fecha reservada</td>
           <td style="width: 550px">{{sitio.fecha}}</td>
         </tr>
         <tr>
+          <td style="width: 150px"> personas</td>
+          <td style="width: 550px;">{{sitio.personas}} personas</td>
+        </tr>
+        <tr>
           <td style="width: 150px">Hora reservada</td>
           <td style="width: 550px">
-            <p v-if="sitio.hora.split(':')[0]>'12'">{{sitio.hora.split(':')[0]}}:{{sitio.hora.split(':')[1]}} pm</p>
-            <p v-if="sitio.hora.split(':')[0]<'12'">{{sitio.hora.split(':')[0]}}:{{sitio.hora.split(':')[1]}} am</p>
+            <p v-show="sitio.hora.split(':')[0]>'12'">{{sitio.hora.split(':')[0]}}:{{sitio.hora.split(':')[1]}} pm</p>
+            <p v-show="sitio.hora.split(':')[0]<'12'">{{sitio.hora.split(':')[0]}}:{{sitio.hora.split(':')[1]}} am</p>
           </td>
         </tr>
         <tr>
           <td style="width: 150px">Fecha de reporte</td>
           <td style="width: 550px">
-            <p v-if="(sitio.registro.split(':')[0])>'12'">{{sitio.registro.split(':')[0]}}:{{sitio.hora.split(':')[1]}} pm</p>
-            <p v-if="(sitio.registro.split(':')[0].split(' ')[1])<'12'">{{sitio.registro.split(':')[0]}}:{{sitio.hora.split(':')[1]}} am</p>
+            <p v-show="(sitio.registro.split(':')[0].split(' ')[1])>'12'">{{sitio.registro.split(':')[0]}}:{{sitio.hora.split(':')[1]}} pm</p>
+            <p v-show="(sitio.registro.split(':')[0].split(' ')[1])<'12'">{{sitio.registro.split(':')[0]}}:{{sitio.hora.split(':')[1]}} am</p>
           </td>
         </tr>
         <tr>
-          <td style="width: 150px">Descripción</td>
-          <td style="width: 550px;"><textarea :disabled="true" v-model="sitio.descripcion" name="textarea" rows="4" cols="50"></textarea></td>
+          <td style="width: 150px">Codigo Qr</td>
+          <vue-qr logoSrc='https://media.istockphoto.com/photos/blue-binary-code-matrix-background-picture-id898346276?k=20&m=898346276&s=612x612&w=0&h=687E8D99tN2ZUm7JGfVmjNiyW6MK0FfdmClchpBTOrU='
+          backgroundColor='gray' Level='2' v-if="sitio.idEstatus=='1'" :text="sitio.qr" :size="100"></vue-qr>
+          <vue-qr backgroundColor='gray' v-if="sitio.idEstatus != '1'" :text="sitio.qr" :size="100"></vue-qr>
         </tr>
         <tr>
           <td style="width: 150px">Comentarios</td>
-          <td style="width: 550px;"><textarea :disabled="true" v-model="sitio.comentario" name="textarea" rows="4" cols="50"></textarea></td>
+          <td style="width: 550px;"><textarea :disabled="true" v-model="sitio.comentario" name="textarea" rows="3" cols="50"></textarea></td>
         </tr>
       </tbody>
     </table>
@@ -72,14 +80,20 @@
 </template>
 
 <script>
+import VueQr from 'vue-qr/src/packages/vue-qr.vue'
 export default {
   name: 'CarritoMW',
   data () {
     return {
       // user: [],
-      sitios: []
+      sitios: [{
+        fecha: ''
+      }
+      ],
+      options: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
     }
   },
+  components: { VueQr },
   created: function () {
     this.traersitios()
   },
@@ -106,7 +120,7 @@ export default {
 
 <style scoped>
 .fo{
-  margin-bottom: 50px;
+  padding-bottom: 50px;
 }
 .col{
   padding-left: 5%;

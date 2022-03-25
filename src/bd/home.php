@@ -1,6 +1,11 @@
 <?php
 include 'conexion.php';
-$queryResult=$connect->query("SELECT * FROM sitio");
+$idZona=$_POST['idZona'];
+if($idZona!=''){
+    $queryResult=$connect->query("SELECT * FROM estados inner JOIN sitio on sitio.idEstado = estados.id WHERE estados.id='$idZona'");
+}else{
+    $queryResult=$connect->query("SELECT * FROM sitio");
+}
 
 $result=array();
 while($fetchData=$queryResult->fetch_assoc()){

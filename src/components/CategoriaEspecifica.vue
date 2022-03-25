@@ -1,6 +1,7 @@
 <template>
     <h1 v-if="sitios== ''">No hay sitios de {{categoria}}</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
+    <h1 v-if="sitios!= ''">Sitios de {{categoria}}<hr></h1>
   <div class="container fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
@@ -59,6 +60,7 @@ export default {
     traersitios () {
       const formdata = new FormData()
       formdata.append('cat', this.$route.params.id)
+      formdata.append('idZona', localStorage.getItem('zona'))
       fetch('http://localhost/mwreservation/categoriaEspecifica.php', {
         method: 'POST',
         body: formdata
@@ -79,13 +81,6 @@ export default {
 <style scoped>
 .fo{
   padding-bottom: 50px;
-}
-.col{
-  padding-left: 5%;
-  margin-left: 5%;
-  padding-right: 5%;
-  margin-right: 5%;
-  margin-bottom: 5%;
 }
 
 .gallery-outer{

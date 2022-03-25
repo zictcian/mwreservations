@@ -1,6 +1,12 @@
 <template>
 <body class="espacio">
 <div class="container-fluid">
+  <div class="contenedorimg">
+<img :src="foto? foto:`https://plataforma.mwcomenius.com.mx/assets/perfil/nuevo.png`" alt="" class="imagenfoto"></div>
+<div class="custom-file">
+    <input :disabled="disabled" type="file" class="custom-file-input">
+    <label class="custom-file-label" style="margin-left:37%"><i class="bi bi-camera camara">{{foto.split('/')[5]}}</i></label>
+  </div>
     <div class="form-group forma">
         <h3 style="background-color: green">Datos personales<hr></h3>
         <div class="input-group mb-3">
@@ -33,12 +39,12 @@
         <button :disabled="disabled" v-on:Click="postData" class="btn btn-primary mb-2">Modificar</button>
         </div>
     </div>
-    <div class="container-fluid cesion">
-      <div class="card" style="width: 26rem;">
+    <div class="cesion">
+    <div class="card" style="width: 26rem;">
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><i class="bi bi-person-square"></i> Cerrar seción</li>
+    <li class="list-group-item"><i class="bi bi-person-square"></i> Cerrar sesión</li>
     <li class="list-group-item" v-if="email">{{email}}</li>
-    <li class="list-group-item" v-if="!email"><a href="/login">Inicia cesion</a></li>
+    <li class="list-group-item" v-if="!email"><a href="/login">Inicia sesión</a></li>
     <li class="list-group-item"><button v-on:click="exit" class="btn btn-outline-danger"><i class="bi bi-x-octagon-fill"></i></button></li>
   </ul>
 </div>
@@ -56,6 +62,7 @@ export default {
       Apaterno: localStorage.getItem('Apaterno'),
       Amaterno: localStorage.getItem('Amaterno'),
       email: localStorage.getItem('correo'),
+      foto: localStorage.getItem('foto'),
       password: '',
       passwordActual: '',
       passwordError2: '',
@@ -89,6 +96,9 @@ export default {
           localStorage.setItem('Amaterno', '')
           localStorage.setItem('correo', '')
           localStorage.setItem('c', '')
+          localStorage.setItem('foto', '')
+          localStorage.setItem('zona', '')
+          localStorage.setItem('zonaname', '')
           this.$router.push({ path: '/' })
         }
       })
@@ -192,6 +202,9 @@ export default {
 </script>
 
 <style scoped>
+.espacio{
+    font-family: 'Fira Sans', sans-serif;
+}
 .inputwigth{
     width: 60%;
     margin-left: 10px;
@@ -202,13 +215,16 @@ label{
     text-align: left;
     margin-left: 10px;
 }
-body{
-    background-color: rgb(231, 227, 221);
-    background-size: cover;
-    font-family: 'Fira Sans', sans-serif;
-}
 .btn{
   margin-left: 45%;
+}
+.imagenfoto{
+  height: 200px;
+  width: 200px;
+  position:absolute;
+}
+.camara:hover{
+  color: rgb(255, 255, 255);
 }
 .btn1{
   margin-left: 40%;
@@ -224,7 +240,7 @@ body{
   margin-top: 0%;
 }
 .forma{
-  background-color: antiquewhite;
+  background-color: rgb(233, 178, 150);
   align-content: center;
   align-items: center;
   margin-top: 25px;
@@ -236,5 +252,11 @@ body{
   align-items: center;
   justify-content: center;
   padding-bottom: 70px;
+}
+.contenedorimg{
+  height: 200px;
+  width: 200px;
+  margin-left: 40%;
+  margin-top: 10px;
 }
 </style>

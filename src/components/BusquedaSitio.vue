@@ -1,6 +1,7 @@
 <template>
     <h1 v-if="sitios== ''">No hay sitios sobre "{{busqueda}}"</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
+    <h1 v-if="sitios!= ''">Sitios sobre "{{busqueda}}"<hr></h1>
   <div class="container fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
@@ -42,6 +43,7 @@ export default {
     traersitios () {
       const formdata = new FormData()
       formdata.append('busqueda', this.$route.params.id)
+      formdata.append('idZona', localStorage.getItem('zona'))
       fetch('http://localhost/mwreservation/busquedaEspecifica.php', {
         method: 'POST',
         body: formdata
