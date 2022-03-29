@@ -12,7 +12,7 @@
                     </div>
                 </td>
                 <td>
-                <iframe v-show="sitios.mapa != 'NA'" width="925" height="270"
+                <iframe v-show="sitios.mapa != 'NA'" width="100%" height="270"
                   :src="sitios.mapa">
                 </iframe>
                 <h3 v-show="sitios.mapa == 'NA'"><hr>No se ha podido cargar el mapa</h3>
@@ -30,54 +30,57 @@
         <div class="input-group-prepend">
         <span class="input-group-text">fecha</span>
         </div>
-        <input v-model="fecha" type="date" class="form-control">
+        <input v-model="fecha" type="date" class="form-control" v-on:change="cambiofecha(fecha)">
         </div>
         <div class="input-group mb-3">
-        <div class="input-group-prepend">
-        <span class="input-group-text">hora entrada</span>
-        </div>
-        <input v-model="entrada" type="time" class="form-control">
+        <span class="input-group-text">Reservacion para: el {{FechaSelect}}</span>
         </div>
         <div class="input-group mb-3">
-        <div class="input-group-prepend">
-        <span class="input-group-text">minutos reservados</span>
-        </div>
-        <input v-model="salida" type="number" class="form-control" placeholder="ejemplo: 120">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Horarios</label>
+          </div>
+          <select class="custom-select" id="horarioseleccionado">
+            <option selected></option>
+            <option :value="horar.id" v-for="(horar, index) in horarios" :key="index" :disabled="!(horar.limite > 0)">{{horar.horaIni}} a {{horar.horaFin}}. Reservaciones disponibles: {{horar.limite}}</option>
+          </select>
         </div>
         <div class="input-group mb-3">
         <div class="input-group-prepend">
         <span class="input-group-text">Personas</span>
         </div>
-        <input v-model="personas" type="number" class="form-control" placeholder="ejemplo: 2">
+        <input v-model="personas" type="number" class="form-control" placeholder="ejemplo: 2" min="1">
         </div>
         <div class="input-group">
         <div class="input-group-prepend">
         <span class="input-group-text">Comentario</span>
         </div>
-        <textarea v-model="comentario" class="form-control" aria-label="With textarea" placeholder="ejemplo: Orden de nachos"></textarea>
+        <textarea v-model="comentario" class="form-control" maxlength="250" placeholder="ejemplo: Orden de nachos"></textarea>
         </div>
-        <button v-on:click="probar" style="margin:15px" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Reservar</button>
+        <button v-on:click="reservar" style="margin:15px" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Reservar</button>
         <button v-on:click="cancelar" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Cancelar</button>
   </div>
   </div>
 </template>
 
 <script>
+import JsPDF from 'jspdf'
 import moment from 'moment'
 export default {
   name: 'ReservacionMW',
   data: function () {
     return {
       fecha: '',
-      entrada: '',
-      salida: '',
+      FechaSelect: '',
       personas: '',
       comentario: '',
       nombre: this.$route.params.id,
       id: this.$route.params.id,
       sitios: [],
       horarios: [],
-      dias: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo']
+      limites: [],
+      seleccion: [],
+      dias: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'],
+      options: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
     }
   },
   created: async function () {
@@ -99,6 +102,41 @@ export default {
       console.log(palabradesencryp)
       return palabradesencryp
     },
+    async cambiofecha (defecha) {
+      const fechita = new Date(defecha)
+      const refecha = fechita.getDate() + 1
+      fechita.setDate(refecha)
+      const sit = await this.desencryp(this.id)
+      const formdata = new FormData()
+      const newfecha = fechita.toLocaleDateString('es-ES', this.options).split(',')[0]
+      this.FechaSelect = fechita.toLocaleDateString('es-ES', this.options)
+      formdata.append('Idsitio', sit)
+      formdata.append('fecha', defecha)
+      formdata.append('dia', newfecha)
+      console.log(newfecha)
+      await fetch('http://localhost/mwreservation/prereservahorario.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        // recorrer todo el horario buscando id = y asi restar antes de guardar horario *ya esta XD
+        const horario = datosRespuest.horario
+        this.limites = datosRespuest.maximo
+        this.seleccion = datosRespuest.seleccion
+        console.log(horario.length, this.limites.length)
+        for (let i = 0; i < horario.length; i++) {
+          for (let j = 0; j < this.limites.length; j++) {
+            console.log(i, j)
+            if (horario[i].id === this.seleccion[j].id) {
+              horario[i].limite = horario[i].limite - this.limites[j].limite
+            }
+          }
+        }
+        this.horarios = horario
+      }).catch(console.log)
+    },
     async traersitios () {
       const sit = await this.desencryp(this.id)
       const formdata = new FormData()
@@ -109,10 +147,8 @@ export default {
       }).then(
         respuest => respuest.json()
       ).then((datosRespuest) => {
-        this.sitios = datosRespuest.sitio
-        this.horarios = datosRespuest.horario
-        console.log(datosRespuest.sitio)
-        console.log(datosRespuest.horario)
+        this.sitios = datosRespuest
+        console.log(datosRespuest)
       }).catch(console.log)
     },
     async cancelar () {
@@ -122,12 +158,12 @@ export default {
       const dato = moment(new Date()).format('YYYY-MM-DD')
       console.log(dato, this.fecha)
       if (this.fecha > dato) {
-        this.$swal('ok', 'correcto', 'succes')
+        this.$swal('ok', 'correcto', 'success')
       } else {
         this.$swal('ok', 'correcto', 'error')
       }
     },
-    async realizarReservacion (comentario, minutosR, fecha, hora, personas) {
+    async realizarReservacion (comentario, fecha, elhorario, personas) {
       const usua = localStorage.getItem('valor')
       if (usua !== '0') {
         const sit = await this.desencryp(this.id)
@@ -136,12 +172,11 @@ export default {
         formdata.append('IdSitio', sit)
         formdata.append('IdUsua', usua)
         formdata.append('comentario', comentario)
-        formdata.append('minutosR', minutosR)
         formdata.append('fecha', fecha)
-        formdata.append('hora', hora)
+        formdata.append('IdHorario', elhorario)
         formdata.append('personas', personas)
         formdata.append('qr', palabra)
-        fetch('http://localhost/mwreservation/hacerreservacion.php', {
+        await fetch('http://localhost/mwreservation/hacerreservacion.php', {
           method: 'POST',
           body: formdata
         }).then(
@@ -149,46 +184,58 @@ export default {
         ).then((datosRespuest) => {
           console.log('dato', datosRespuest)
           try {
-            if (datosRespuest !== 'error') {
+            if (datosRespuest) {
               this.$swal('Exito', 'Reservación realizada', 'success')
-              this.hacerpdf(comentario, minutosR, fecha, hora, personas)
+              this.hacerpdf(comentario, '2', fecha, '2:20', personas)
               this.$router.push({ name: 'CarritoMW' })
+            } else {
+              this.$swal('Error interno', 'Fallo al reservar sitio', 'error')
             }
           } catch (e) {
+            this.$swal('Error al generar pdf', 'Recibo detenido', 'error')
+            console.log('error')
           }
         }).catch(console.log)
       } else {
         this.$swal('Inicia sesión', 'operación anulada', 'info')
       }
     },
+    hacerpdf (comentario, minutosR, fecha, hora, personas) {
+      const doc = new JsPDF()
+      const imgData = new Image()
+      imgData.src = 'https://media.istockphoto.com/photos/-picture-id1311690310'
+      doc.addImage(imgData, 'png', 120, 20, 70, 50, 'mono')
+      doc.setFont('Verdana')
+      doc.setFontSize(22)
+      doc.text(20, 20, 'MWReservation ')
+      doc.setFont('Arial')
+      doc.setFontSize(14)
+      doc.text(20, 30, 'Comentarios: ' + comentario)
+      doc.text(20, 40, 'Tiempo reservado: ' + minutosR + ' minutos')
+      doc.text(20, 50, 'Fecha reservada: ' + new Date(fecha).toLocaleDateString('es-ES', this.options))
+      doc.text(20, 60, 'Hora reservada: ' + hora)
+      doc.text(20, 70, 'Lugares reservados: ' + personas)
+      doc.text(20, 80, 'Reservacion realizada por: ' + localStorage.getItem('nombre') +
+      ' ' + localStorage.getItem('Apaterno') + ' ' + localStorage.getItem('Amaterno'))
+      doc.addPage()
+      doc.text(20, 20, 'Te gusto la aplicación?')
+      window.open(URL.createObjectURL(doc.output('blob')))
+      // doc.save('Test.pdf')
+    },
     reservar () {
+      const elhorario = document.getElementById('horarioseleccionado').value
       const usua = localStorage.getItem('valor')
       const dato = moment(new Date()).format('YYYY-MM-DD')
       console.log(this.fecha)
       if (usua !== '0') {
         if (this.personas > 0) {
-          if (this.salida > 10) {
-            if (this.fecha > dato) {
-              this.$swal('ok', 'correcto', 'succes')
-              this.realizarReservacion(this.comentario, this.salida, this.fecha, this.entrada, this.personas)
+          if (this.fecha >= dato) {
+            if (elhorario !== '') {
+              // this.$swal('ok', elhorario, 'success')
+              this.realizarReservacion(this.comentario, this.fecha, elhorario, this.personas)
             } else {
-              if (this.fecha === dato) {
-                const hora = new Date().getHours()
-                const minutos = new Date().getMinutes()
-                const newhora = (hora + 1) + ':' + minutos
-                console.log(newhora, this.entrada)
-                if (this.entrada > newhora) {
-                  this.$swal('ok', 'correcto', 'succes')
-                  this.realizarReservacion(this.comentario, this.salida, this.fecha, this.entrada, this.personas)
-                } else {
-                  this.$swal('hora de reserva invalido', 'Tienes que reservar con una hora de anticipación', 'info')
-                }
-              } else {
-                this.$swal('error de fecha', 'ingresa una fecha valida', 'info')
-              }
+              this.$swal('No hay horario seleccionado', 'Es necesario seleccionar un horario', 'info')
             }
-          } else {
-            this.$swal('rango de hora invalido', 'la hora de salida tiene que ser mayor', 'info')
           }
         } else {
           this.$swal('ingresa una ponderacion valida', 'personas a registrar minimo 1', 'info')

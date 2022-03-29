@@ -18,13 +18,12 @@
 export default {
   name: 'HomeMW',
   methods: {
-    casa () {
-      localStorage.setItem('zona', '')
-      localStorage.setItem('zonaname', '')
+    async casa () {
       if (localStorage.getItem('valor') === null) {
         localStorage.setItem('valor', '0')
       }
-      this.$router.push({ name: 'InicioMW' })
+      await this.$router.push({ name: 'InicioMW', replace: true })
+      this.$router.go(0)
     }
   }
 }

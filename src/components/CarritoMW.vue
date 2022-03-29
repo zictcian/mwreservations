@@ -36,7 +36,7 @@
       <tbody class="tablacuerpo" style="background-color:white">
         <tr>
           <td style="width: 150px">Tiempo reservado</td>
-          <td style="width: 550px">{{sitio.minutosR}} Minutos</td>
+          <td style="width: 550px">{{10}} Minutos</td>
         </tr>
         <tr>
           <td style="width: 150px">Fecha reservada</td>
@@ -49,16 +49,14 @@
         <tr>
           <td style="width: 150px">Hora reservada</td>
           <td style="width: 550px">
-            <p v-show="sitio.hora.split(':')[0]>'12'">{{sitio.hora.split(':')[0]}}:{{sitio.hora.split(':')[1]}} pm</p>
-            <p v-show="sitio.hora.split(':')[0]<'12'">{{sitio.hora.split(':')[0]}}:{{sitio.hora.split(':')[1]}} am</p>
+            <p v-show="true">{{10}} am</p>
           </td>
         </tr>
         <tr>
           <td style="width: 150px">Fecha de reporte</td>
           <td style="width: 550px">
-            <p v-show="(sitio.registro.split(':')[0].split(' ')[1])>'12'">{{sitio.registro.split(':')[0]}}:{{sitio.hora.split(':')[1]}} pm</p>
-            <p v-show="(sitio.registro.split(':')[0].split(' ')[1])<'12'">{{sitio.registro.split(':')[0]}}:{{sitio.hora.split(':')[1]}} am</p>
-          </td>
+          <p>{{sitio.registro}}</p>
+           </td>
         </tr>
         <tr>
           <td style="width: 150px">Codigo Qr</td>

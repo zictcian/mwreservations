@@ -5,13 +5,14 @@
       <a href="/"><i class="bi bi-house-fill colore" style="font-size: 1.5rem;color:black"></i></a>
       <div class=""><input v-model="busqueda" class="typeahead form-control" type="text" placeholder="Search place"></div>
       <button class="btn" v-on:click="buscar"><i class="fa fa-search"></i></button>
-      <select class="custom-select" style="width:300px;margin-left:20px" id="zonaselected">
+      <div class="container">
+        <div class="collapse navbar-collapse">
+          <button class="btn2" v-on:click="Zonaquitar()"><i class="bi bi-trash"></i></button>
+          <select class="custom-select" style="width:300px;" id="zonaselected">
                 <option selected>{{zonanombre}}</option>
                 <option :value="index" v-for="(zona ,index) in zonas" :key="index">{{index+1}}. {{zona.estado}}</option>
               </select>
             <button class="btn" v-on:click="Zonaselec()"><i class="bi bi-arrow-right-circle"></i></button>
-      <div class="container">
-        <div class="collapse navbar-collapse">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <a href="/inicio" class="nav-link"><i class="bi bi-shop-window colore"></i></a>
@@ -87,6 +88,12 @@ export default {
       localStorage.setItem('zonaname', this.zonas[newzona].estado)
       await this.$router.push({ path: '/inicio', replace: true })
       this.$router.go(0)
+    },
+    async Zonaquitar () {
+      localStorage.setItem('zona', '')
+      localStorage.setItem('zonaname', '')
+      await this.$router.push({ path: '/inicio', replace: true })
+      this.$router.go(0)
     }
   }
 }
@@ -99,7 +106,7 @@ export default {
   width: 100%;
   border-bottom-right-radius: 0%;
 }
-.btn {
+button {
   background-color: orange; /* Blue background */
   border: none; /* Remove borders */
   color: white; /* White text */
@@ -110,6 +117,10 @@ export default {
 }
 .btn:hover {
   background-color: green;
+}
+.btn2:hover {
+  background-color: rgb(180, 0, 0);
+  color: black;
 }
 .nav-item:hover{
   color: black;

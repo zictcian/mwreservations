@@ -10,7 +10,7 @@
       <img class="card-img-top" :src="sitios.logo" alt="Card image cap">
       <div class="card-body bodycard">
         <h3>- {{sitios.categoria}} -</h3>
-        <button v-on:click="hacerpdf('comentario','70','2022/02/02','08:22','2')" class="btn valorar btn-primary" style="margin-top: 10px"><h6>Pruebas</h6></button>
+        <button v-on:click="hacerpdf('comentario','70','2022/03/28','08:22','2')" class="btn valorar btn-primary" style="margin-top: 10px"><h6>Pruebas</h6></button>
         <button v-on:click="nuevavaloracion" class="btn valorar btn-primary" style="margin-top: 10px"><h5>Valorar sitio</h5></button>
       </div>
       <div class="card-footer">
@@ -75,6 +75,18 @@
     </div>
 </div>
 </div>
+  <div class="row">
+  <ul class="list-group list-group-flush limitacion"><h3 class="list-group-item" style="background-color:goldenrod">Experiencias</h3>
+    <ol class="list-group-item" v-show="sitios.que_haras != ''">Qué harás: <br>{{sitios.que_haras}}</ol>
+    <ol class="list-group-item" v-show="sitios.en_detalle != ''">Detalle: <br>{{sitios.en_detalle}}</ol>
+    <ol class="list-group-item" v-show="sitios.incluye != ''">Incluye: <br>{{sitios.incluye}}</ol>
+    <ol class="list-group-item" v-show="sitios.no_apto_para != ''">No apto para: <br>{{sitios.no_apto_para}}</ol>
+    <ol class="list-group-item" v-show="sitios.covid_precauciones != ''">Precauciones del Covid-19: <br>{{sitios.covid_precauciones}}</ol>
+    <ol class="list-group-item" v-show="sitios.covid_requisitos!= ''">Requisitos del Covid-19: <br>{{sitios.covid_requisitos}}</ol>
+    <ol class="list-group-item" v-show="sitios.que_llevar != ''">Qué llevar: <br>{{sitios.que_llevar}}</ol>
+    <ol class="list-group-item" v-show="sitios.no_permitido != ''">No permitido: <br>{{sitios.no_permitido}}</ol>
+  </ul>
+  </div>
   </div>
   <div v-show="catalogos != ''" class="slidercontrol">
       <div class="gallery-outer" v-for="(catalogo ,index) in catalogos" :key="index">
@@ -268,40 +280,49 @@ label{ color:grey;}
       }).then(async (result) => {
         console.log(result.value)
         const comen = result.value[0]
-        const ponde = result.value[1] + '.' + result.value[2]
-        console.log(ponde)
-        if (comen !== '') {
-          if (ponde <= 5 && ponde >= 0) {
-            const usua = localStorage.getItem('valor')
-            if (usua !== '0') {
-              const sit = await this.desencryp(this.id)
-              const formdata = new FormData()
-              formdata.append('IdSitio', sit)
-              formdata.append('IdUsua', usua)
-              formdata.append('comentario', comen)
-              formdata.append('ponderacion', ponde)
-              fetch('http://localhost/mwreservation/agregarcomentario.php', {
-                method: 'POST',
-                body: formdata
-              }).then(
-                respuest => respuest.json()
-              ).then((datosRespuest) => {
-                console.log('dato', datosRespuest)
-                if (datosRespuest !== 'error') {
-                  this.traerComentarios()
-                  this.$swal('valoración exitosa', 'Comentario realizado', 'success')
-                } else {
-                  this.$swal('Error de carga', 'Comentario no realizado', 'error')
-                }
-              }).catch(console.log)
+        const d = result.value[2].charAt(0)
+        let ponde = result.value[1] + '.' + d
+        console.log(ponde, comen)
+        if (d !== '.') {
+          if (result.value[1] === 5) {
+            console.log('bien')
+            ponde = '5.0'
+          }
+          if (comen !== '') {
+            if (ponde <= 5 && ponde >= 0) {
+              const usua = localStorage.getItem('valor')
+              if (usua !== '0') {
+                const sit = await this.desencryp(this.id)
+                const formdata = new FormData()
+                formdata.append('IdSitio', sit)
+                formdata.append('IdUsua', usua)
+                formdata.append('comentario', comen)
+                formdata.append('ponderacion', ponde)
+                fetch('http://localhost/mwreservation/agregarcomentario.php', {
+                  method: 'POST',
+                  body: formdata
+                }).then(
+                  respuest => respuest.json()
+                ).then((datosRespuest) => {
+                  console.log('dato', datosRespuest)
+                  if (datosRespuest !== 'error') {
+                    this.traerComentarios()
+                    this.$swal('valoración exitosa', 'Comentario realizado', 'success')
+                  } else {
+                    this.$swal('Error de carga', 'Comentario no realizado', 'error')
+                  }
+                }).catch(console.log)
+              } else {
+                this.$swal('Inicia sesión', 'operación anulada', 'info')
+              }
             } else {
-              this.$swal('Inicia sesión', 'operación anulada', 'info')
+              this.$swal('ingresa una ponderacion valida', 'valores aceptados del 0 al 5', 'info')
             }
           } else {
-            this.$swal('ingresa una ponderacion valida', 'valores aceptados del 0 al 5', 'info')
+            this.$swal('error de comentario', 'Es requerido contar con un comentario', 'info')
           }
         } else {
-          this.$swal('error de comentario', 'Es requerido contar con un comentario', 'info')
+          this.$swal('Error de ponderacion', 'las ponderacion no valida', 'info')
         }
       })
     },
@@ -458,6 +479,13 @@ label{ color:grey;}
 .fo{
   margin-bottom: 50px;
 }
+.limitacion{
+  width: 1080px;
+  background-color: goldenrod;
+  text-align: left;
+  padding-left: 5%;
+  padding-right: 5%;
+}
 .col{
   padding-left: 5%;
   margin-left: 5%;
@@ -491,8 +519,6 @@ label{ color:grey;}
   text-overflow: ellipsis;
   align-content: left;
   align-items: left;
-}
-.cabezatarjeta{
 }
 .tarjetas{
   position:relative;
