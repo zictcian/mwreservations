@@ -5,7 +5,7 @@
 <img :src="foto? foto:`https://plataforma.mwcomenius.com.mx/assets/perfil/nuevo.png`" alt="" class="imagenfoto"></div>
 <div class="custom-file">
     <input :disabled="disabled" type="file" class="custom-file-input">
-    <label class="custom-file-label" style="margin-left:37%"><i class="bi bi-camera camara">{{foto.split('/')[5]}}</i></label>
+    <label class="custom-file-label" style="margin-left:37%;"><i class="bi bi-camera camara"></i></label>
   </div>
     <div class="form-group forma">
         <h3 style="background-color: green">Datos personales<hr></h3>

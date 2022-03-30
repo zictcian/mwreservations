@@ -75,9 +75,16 @@ hr{
     width: 100%;
     height: 100%;
   }
-  h1,h2,h3,h4,h5,h6,label,span{
+  h1,h2,h3{
     font-weight: 500;
-    font-family: 'Fira Sans', sans-serif;
+    font-family: 'Helvetica', sans-serif;
+  }
+   h4,h5,h6{
+    font-weight: 500;
+    font-family: 'Verdana', sans-serif;
+  }
+  p{
+    font-family: 'arial', sans-serif;
   }
  body{
     background: antiquewhite;

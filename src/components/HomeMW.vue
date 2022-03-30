@@ -4,12 +4,12 @@
  <img src="../assets/restaurant.jpg" class="imagens">
 </aside>
     <div class="cuerpo">
-      <center><h2>MWReservations</h2>
+      <center><h2 class="display-4">MWReservations</h2>
       <hr>
-      <h5>Proporcionando conexiones entre lugares con comodidad y seguridad.</h5>
+      <h5 class="lead">Proporcionando conexiones entre lugares con comodidad y seguridad.</h5>
       <div class="relleno"><img class="imagenlogo" src="../assets/logoReservations.png"></div>
     </center>
-    <a v-on:click="casa"><button class="btn"><i class="fa fa-sign-in"></i> Entrar</button></a>
+    <a v-on:click="casa"><button class="btn btn-dark" style="margin-top: 50px;margin-left: 45%;"><i class="fa fa-sign-in"></i> Entrar</button></a>
     </div>
   </body>
 </template>
@@ -22,6 +22,8 @@ export default {
       if (localStorage.getItem('valor') === null) {
         localStorage.setItem('valor', '0')
       }
+      localStorage.setItem('zona', '0')
+      localStorage.setItem('zonaname', '')
       await this.$router.push({ name: 'InicioMW', replace: true })
       this.$router.go(0)
     }
@@ -50,18 +52,9 @@ aside{
   border-radius: 50%;
 }
 .relleno{
-  background-color: black;
+  /*background-color: black;*/
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.btn{
-  margin-top: 50px;
-  margin-left: 45%;
-  border-color: black;
-  border-radius: 25%;
-  background-color: orange;
-}
-.btn:hover{
-  background-color: yellowgreen;
-}
+
 </style>

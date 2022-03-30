@@ -60,6 +60,7 @@
         </tr>
         <tr>
           <td style="width: 150px">Codigo Qr</td>
+          <div id="qrcode" text="http://jindo.dev.naver.com/collie"></div>
           <vue-qr logoSrc='https://media.istockphoto.com/photos/blue-binary-code-matrix-background-picture-id898346276?k=20&m=898346276&s=612x612&w=0&h=687E8D99tN2ZUm7JGfVmjNiyW6MK0FfdmClchpBTOrU='
           backgroundColor='gray' Level='2' v-if="sitio.idEstatus=='1'" :text="sitio.qr" :size="100"></vue-qr>
           <vue-qr backgroundColor='gray' v-if="sitio.idEstatus != '1'" :text="sitio.qr" :size="100"></vue-qr>

@@ -90,7 +90,7 @@ export default {
       this.$router.go(0)
     },
     async Zonaquitar () {
-      localStorage.setItem('zona', '')
+      localStorage.setItem('zona', '0')
       localStorage.setItem('zonaname', '')
       await this.$router.push({ path: '/inicio', replace: true })
       this.$router.go(0)

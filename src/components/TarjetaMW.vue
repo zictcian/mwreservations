@@ -4,12 +4,14 @@
     <div class="container fo">
     <h1 v-if="sitios== ''">No hay sitios registrados</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
+    <span v-show="false"><vue-qr id="elqr" :text="palabra" :size="200"></vue-qr></span>
   <div class="container">
     <div class="row">
     <div class="card espacio" style="width: 24rem;">
       <img class="card-img-top" :src="sitios.logo" alt="Card image cap">
       <div class="card-body bodycard">
         <h3>- {{sitios.categoria}} -</h3>
+        <button v-on:click="hacerqr" class="btn valorar btn-primary" style="margin-top: 10px"><h6>antes</h6></button>
         <button v-on:click="hacerpdf('comentario','70','2022/03/28','08:22','2')" class="btn valorar btn-primary" style="margin-top: 10px"><h6>Pruebas</h6></button>
         <button v-on:click="nuevavaloracion" class="btn valorar btn-primary" style="margin-top: 10px"><h5>Valorar sitio</h5></button>
       </div>
@@ -156,7 +158,7 @@
 
 <script>
 import JsPDF from 'jspdf'
-// import VueQr from 'vue-qr/src/packages/vue-qr.vue'
+import VueQr from 'vue-qr/src/packages/vue-qr.vue'
 export default {
   name: 'TarjetaMW',
   data () {
@@ -169,6 +171,7 @@ export default {
       sitios: [{
         horario: ''
       }],
+      palabra: '',
       otrositios: [],
       nombre: this.$route.params.nombre,
       id: this.$route.params.id,
@@ -179,28 +182,76 @@ export default {
   created: async function () {
     await this.traersitios()
   },
+  components: { VueQr },
   methods: {
-    hacerpdf (comentario, minutosR, fecha, hora, personas) {
-      const doc = new JsPDF()
-      const imgData = new Image()
-      imgData.src = 'https://media.istockphoto.com/photos/-picture-id1311690310'
-      doc.addImage(imgData, 'png', 120, 20, 70, 50, 'mono')
-      doc.setFont('Verdana')
-      doc.setFontSize(22)
-      doc.text(20, 20, 'MWReservation ')
-      doc.setFont('Arial')
-      doc.setFontSize(14)
-      doc.text(20, 30, 'Comentarios: ' + comentario)
-      doc.text(20, 40, 'Tiempo reservado: ' + minutosR + ' minutos')
-      doc.text(20, 50, 'Fecha reservada: ' + new Date(fecha).toLocaleDateString('es-ES', this.options))
-      doc.text(20, 60, 'Hora reservada: ' + hora)
-      doc.text(20, 70, 'Lugares reservados: ' + personas)
-      doc.text(20, 80, 'Reservacion realizada por: ' + localStorage.getItem('nombre') +
+    hacerqr: async function () {
+      return new Promise((resolve, reject) => {
+        // here our function should be implemented
+        setTimeout(() => {
+          console.log('Hello from inside the testAsync function')
+          this.palabra = this.encryp('1' + this.id + this.nombre + Date())
+        }, 2000
+        )
+      })
+    },
+    async hacerpdf (comentario, minutosR, fecha, hora, personas) {
+      return new Promise((resolve, reject) => {
+        let timerInterval
+        this.$swal.fire({
+          title: 'Procesando reservacion',
+          html: 'Tiempo estimado <b></b> milisegundos.',
+          timer: 2500,
+          timerProgressBar: true,
+          didOpen: () => {
+            this.$swal.showLoading()
+            const b = this.$swal.getHtmlContainer().querySelector('b')
+            timerInterval = setInterval(() => {
+              b.textContent = this.$swal.getTimerLeft()
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === this.$swal.DismissReason.timer) {
+            console.log('Reservacion realizada')
+          }
+        }).catch(console.log)
+        const usua = localStorage.getItem('valor')
+        if (usua !== '') {
+          this.palabra = this.encryp(usua + this.id + this.nombre + Date())
+          setTimeout(() => {
+            const imgData = new Image()
+            const doc = new JsPDF()
+            imgData.src = 'https://media.istockphoto.com/photos/german-stimulus-packages-after-the-corona-crisis-exchange-wooden-cube-picture-id1313171624?k=20&m=1313171624&s=612x612&w=0&h=N-xzDl1llX-1IlT8WzMruog7313DkWuIa9NL8nmJ6sY='
+            const qr = document.getElementById('elqr')
+            doc.addFont('Roboto-Bold.ttf', 'Roboto', 'normal')
+            doc.setFont('Roboto')
+            doc.addImage(imgData, 'png', 50, 30, 90, 60, 'mono')
+            doc.setFontSize(22)
+            doc.text(70, 20, 'MWReservation')
+            doc.setFontSize(14)
+            doc.text(20, 110, 'Comentarios: ' + comentario)
+            doc.text(20, 120, 'Tiempo reservado: ' + minutosR + ' minutos')
+            doc.text(20, 130, 'Fecha reservada: ' + new Date(fecha).toLocaleDateString('es-ES', this.options))
+            doc.text(20, 140, 'Hora reservada: ' + hora)
+            doc.text(20, 150, 'Lugares reservados: ' + personas)
+            doc.text(20, 160, 'Reservacion realizada por: ' + localStorage.getItem('nombre') +
       ' ' + localStorage.getItem('Apaterno') + ' ' + localStorage.getItem('Amaterno'))
-      doc.addPage()
-      doc.text(20, 20, 'Te gusto la aplicación?')
-      window.open(URL.createObjectURL(doc.output('blob')))
-      // doc.save('Test.pdf')
+            doc.text(70, 170, 'QR registrado para uso de reservación')
+            doc.addImage(qr, 'PNG', 50, 175, 100, 100)
+            doc.addPage()
+            doc.text(20, 20, 'Te gusto la aplicación?')
+            window.open(URL.createObjectURL(doc.output('blob')))
+            // doc.save('Test.pdf')
+            this.$swal('Reservacion realizada', 'Validación realizada', 'success')
+          }, 2000
+          )
+        } else {
+          this.$swal('Inicio de sesión necesario', 'ingresa sesión primero', 'info')
+        }
+      })
     },
     async ir (dato, nombre) {
       dato = this.encryp(dato)
