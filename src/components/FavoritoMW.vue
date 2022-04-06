@@ -1,6 +1,6 @@
 <template>
     <h1>Sitios favoritos <hr></h1>
-    <div class="container fo">
+    <div class="fo">
     <h1 v-if="sitios== ''">No hay sitios registrados</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
@@ -94,12 +94,15 @@ export default {
   height: 250px;
 }
 .textocard{
-  height: 130px;
+  height: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
 }
 .estrella{
   color: red;
+}
+.card{
+  background: rgb(192,185,123);
 }
 </style>

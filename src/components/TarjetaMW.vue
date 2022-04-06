@@ -1,137 +1,121 @@
 <template>
-<button v-on:click="irareservar" class="btn btn-success reserva"><i class="bi bi-cart-check"></i> Reservar </button>
-    <h1>{{sitios.nombre}}</h1>
+<button v-on:click="irareservar" class="reserva"><i class="bi bi-cart-check">Reservar</i></button>
+    <div class="">
+    </div>
     <div class="container fo">
     <h1 v-if="sitios== ''">No hay sitios registrados</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
     <span v-show="false"><vue-qr id="elqr" :text="palabra" :size="200"></vue-qr></span>
-  <div class="container">
-    <div class="row">
-    <div class="card espacio" style="width: 24rem;">
-      <img class="card-img-top" :src="sitios.logo" alt="Card image cap">
-      <div class="card-body bodycard">
-        <h3>- {{sitios.categoria}} -</h3>
-        <button v-on:click="hacerqr" class="btn valorar btn-primary" style="margin-top: 10px"><h6>antes</h6></button>
-        <button v-on:click="hacerpdf('comentario','70','2022/03/28','08:22','2')" class="btn valorar btn-primary" style="margin-top: 10px"><h6>Pruebas</h6></button>
-        <button v-on:click="nuevavaloracion" class="btn valorar btn-primary" style="margin-top: 10px"><h5>Valorar sitio</h5></button>
-      </div>
-      <div class="card-footer">
-      {{sitios.ponderacion}} estrellas
-      <div class="Row">
-        <div v-for="n in 5" :key="n" class="gallery-outer">
-        <i v-if="sitios.ponderacion>=n" class="bi bi-star-fill estrella" style="font-size: 2rem;"></i>
-        <i v-else-if="sitios.ponderacion%1!=0 && n-1<sitios.ponderacion" class="bi bi-star-half estrella" style="font-size: 2rem;"></i>
-        <i v-else class="bi bi-star estrella" style="font-size: 2rem;"></i>
-      </div>
-      </div>
-    </div>
-    </div>
-    <div class="card espacio" style="">
-  <div class="card-header textocard">
-    <button v-show="!confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart" style="color:black"></i> Agregar a favoritos</a></button>
+    <div class="group">
+        <h1><button v-on:click="hacerpdf('comentario','70','2022/03/28','08:22','2')" class="btn valorar">Pruebas</button>
+        <button v-show="!confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart" style="color:black"></i> Agregar a favoritos</a></button>
     <button v-show="confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart-fill" style="color:red"></i> Eliminar de favoritos</a></button>
-    </div>
-  <div class="card-body">
-    <h5 class="card-title">Datos de descripción</h5>
-    <table style="">
-      <tbody class="tablacuerpo" style="background-color:white">
-        <tr>
-          <td style="width: 150px"><i class="bi bi-telephone-forward"></i> telefono</td>
-          <td style="width: 550px;">{{sitios.telefono}}</td>
-        </tr>
-        <tr>
-          <td style="width: 150px"><i class="bi bi-geo-alt-fill"></i> ubicación</td>
-          <td style="width: 550px;">{{sitios.ubicacion}}</td>
-        </tr>
-        <tr>
-          <td style="width: 150px">Descripción</td>
-          <td style="width: 550px;"><textarea :disabled="true" v-model="sitios.descripcion" name="textarea" rows="4" cols="50"></textarea></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="Container">
+    {{sitios.nombre}}</h1>
       <div class="row">
-      <table class="tablacuerpo">
-        <thead>
-          <tr>
-          <td style="width: 100px"><i class="bi bi-calendar2"></i> Dia</td>
-          <td style="width: 150px;">Horario</td>
-        </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(horar, index) in splitedList(sitios.horario)" :key="horar">
-          <td style="width: 100px"><i class="bi bi-calendar-week-fill"></i> {{dias[index]}}</td>
-          <td style="width: 100px;"><i class="bi bi-calendar-event"></i> {{horar}}</td>
-        </tr>
-        </tbody>
-      </table>
-      <div class="titulos" style="width:400px;">
-        Catalogo
-        <ol>
-        <li value="0" v-show="catalogos == ''">Sin imagenes registradas</li>
-        <li v-for="(catalogo, index) in catalogos" :key="index">{{catalogo.title}}</li>
-        </ol>
+        <button v-on:click="mover(0)" class="one_third sliderlinks"><i class="bi bi-arrow-left"></i></button>
+        <button v-on:click="mover(1)" class="one_third sliderlinks"><i class="bi bi-arrow-right"></i></button>
       </div>
-    </div>
-    </div>
-    </div>
-</div>
-</div>
-  <div class="row">
-  <ul class="list-group list-group-flush limitacion"><h3 class="list-group-item" style="background-color:goldenrod">Experiencias</h3>
-    <ol class="list-group-item" v-show="sitios.que_haras != ''">Qué harás: <br>{{sitios.que_haras}}</ol>
-    <ol class="list-group-item" v-show="sitios.en_detalle != ''">Detalle: <br>{{sitios.en_detalle}}</ol>
-    <ol class="list-group-item" v-show="sitios.incluye != ''">Incluye: <br>{{sitios.incluye}}</ol>
-    <ol class="list-group-item" v-show="sitios.no_apto_para != ''">No apto para: <br>{{sitios.no_apto_para}}</ol>
-    <ol class="list-group-item" v-show="sitios.covid_precauciones != ''">Precauciones del Covid-19: <br>{{sitios.covid_precauciones}}</ol>
-    <ol class="list-group-item" v-show="sitios.covid_requisitos!= ''">Requisitos del Covid-19: <br>{{sitios.covid_requisitos}}</ol>
-    <ol class="list-group-item" v-show="sitios.que_llevar != ''">Qué llevar: <br>{{sitios.que_llevar}}</ol>
-    <ol class="list-group-item" v-show="sitios.no_permitido != ''">No permitido: <br>{{sitios.no_permitido}}</ol>
-  </ul>
-  </div>
-  </div>
-  <div v-show="catalogos != ''" class="slidercontrol">
-      <div class="gallery-outer" v-for="(catalogo ,index) in catalogos" :key="index">
-        <button :disabled="index == this.dato" v-on:click="mover(index)" class="sliderlinks">{{index+1}}</button>
+      <div class="one_third first"><a href="#">
+      <img class="card-img-top" v-show="this.dato == -1" :src="sitios.logo" alt="Card image cap">
+      <div v-for="(catalogo, index) in catalogos" :key="catalogo">
+      <img class="card-img-top" v-show="index == this.dato"  :src="catalogo.link" alt=""></div></a></div>
+      <div class="two_third">
+        <div class="btmspace-50">
+          <h3 class="heading">- {{sitios.categoria}} -</h3>
+          <p class="nospace">{{sitios.descripcion}}</p>
         </div>
+        <ul class="fa-ul clear">
+          <li class="one_half first"><i class="fa-li fa fa-globe"></i>
+            <h6 class="heading btmspace-10 font-x1"><a href="#">ubicación</a></h6>
+            <p>{{sitios.ubicacion}}</p>
+          </li>
+          <li class="one_half"><i class="fa-li fa bi bi-stars"></i>
+            <h6 class="heading btmspace-10 font-x1"><a href="#">{{sitios.ponderacion}} estrellas</a></h6>
+            <div class="Row">
+                <div v-for="n in 5" :key="n" class="gallery-outer">
+                <i v-if="sitios.ponderacion>=n" class="bi bi-star-fill estrella" style="font-size: 2rem;"></i>
+                <i v-else-if="sitios.ponderacion%1!=0 && n-1<sitios.ponderacion" class="bi bi-star-half estrella" style="font-size: 2rem;"></i>
+                <i v-else class="bi bi-star estrella" style="font-size: 2rem;"></i>
+              </div>
+              </div>
+          </li>
+          <li class="one_half first"><i class="fa-li fa fa-whatsapp"></i>
+            <h6 class="heading btmspace-10 font-x1"><a href="#">telefono</a></h6>
+            <p>{{sitios.telefono}}</p>
+          </li>
+          <li class="one_half"><i class="fa-li fa bi bi-envelope-check-fill"></i>
+            <h6 class="heading btmspace-10 font-x1"><a href="#">Correo</a></h6>
+            <p>{{sitios.correo}}</p>
+          </li>
+        </ul>
       </div>
-  <div v-show="catalogos != ''" class="slider">
-    <div v-for="(catalogo, index) in catalogos" :key="catalogo">
-      <transition name="fade">
-      <img v-show="index == this.dato"  class="imagen" :src="catalogo.link" alt=""></transition>
     </div>
-  </div>
-  <div class="comentarios">
-    <h2>Comentarios de los clientes</h2>
-    <hr style="top:0%">
-    <h3 v-show="comentarios == ''">Sin Comentarios</h3>
-  <ul v-show="comentarios" class="list-unstyled">
-  <li v-show="numcomentarios > index" class="media tarjetas" v-for="(comentario, index) in comentarios" :key="index">
-    <img class="mr-3 logo" :src="comentario.foto" alt="Generic placeholder image">
-    <div class="media-body" style="margin-right: 10px;">
-       <i class="bi bi-bookmark-check" style="top:0%;margin-top:0%">Cuenta verificada</i>
-       <div class="row" style="margin-left:3px">
-        <h6 class="mt-0 mb-1" style="text-align:left;width:200px">{{comentario.nombre}} {{comentario.Apaterno}} {{comentario.Amaterno}}</h6>
-        <p class="">{{comentario.valoracion}} estrellas {</p>
-        <div v-for="n in 5" :key="n" class="gallery-outer" style="">
-        <i v-if="comentario.valoracion>=n" class="bi bi-star-fill estrella" style="font-size: 1rem;"></i>
-        <i v-else-if="comentario.valoracion%1!=0 && n-1<comentario.valoracion" class="bi bi-star-half estrella" style="font-size: 1rem;"></i>
-        <i v-else class="bi bi-star estrella" style="font-size: 1rem;"></i>
+    <div class="scrollable">
+        <table>
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Horario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(horar, index) in splitedList(sitios.horario)" :key="horar">
+          <td ><i class="bi bi-calendar-week-fill"></i> {{dias[index]}}</td>
+          <td><i class="bi bi-calendar-event"></i> {{horar}}</td>
+        </tr>
+          </tbody>
+        </table>
       </div>
-                                                                            <p class="gallery-outer">}</p>
-  <p style="margin-left:10%">{{comentario.fecha.split(' ')[0].split('-')[2]}}/{{comentario.fecha.split(' ')[0].split('-')[1]}}/{{comentario.fecha.split(' ')[0].split('-')[0]}} {{comentario.fecha.split(' ')[1]}}</p>
-      </div>
-      <div class="cuerpotarjeta">{{comentario.Mensaje}}</div>
-      </div>
-  </li>
-  <div>
-    <button class="btn more" v-show="this.comentarios.length > numcomentarios" v-on:click="actualizarcomentarios">mostrar más</button>
-    <button class="btn more" v-show="numcomentarios > 3" v-on:click="actualizarcomentarios2">mostrar menos</button>
+      <iframe v-show="sitios.mapa != 'NA'" width="100%" height="270"
+                  :src="sitios.mapa">
+                </iframe>
+    <div class="grid" style="text-align:left">
+      <ul class="list-group list-group-flush"><h3>Experiencias</h3>
+        <ol class="list-group-item" v-show="sitios.que_haras != ''">Qué harás: <br>{{sitios.que_haras}}</ol>
+        <ol class="list-group-item" v-show="sitios.en_detalle != ''">Detalle: <br>{{sitios.en_detalle}}</ol>
+        <ol class="list-group-item" v-show="sitios.incluye != ''">Incluye: <br>{{sitios.incluye}}</ol>
+        <ol class="list-group-item" v-show="sitios.no_apto_para != ''">No apto para: <br>{{sitios.no_apto_para}}</ol>
+        <ol class="list-group-item" v-show="sitios.covid_precauciones != ''">Precauciones del Covid-19: <br>{{sitios.covid_precauciones}}</ol>
+        <ol class="list-group-item" v-show="sitios.covid_requisitos!= ''">Requisitos del Covid-19: <br>{{sitios.covid_requisitos}}</ol>
+        <ol class="list-group-item" v-show="sitios.que_llevar != ''">Qué llevar: <br>{{sitios.que_llevar}}</ol>
+        <ol class="list-group-item" v-show="sitios.no_permitido != ''">No permitido: <br>{{sitios.no_permitido}}</ol>
+      </ul>
     </div>
-  </ul>
+    <div id="comments">
+        <h2>Comentarios de los clientes</h2>
+        <ul v-show="comentarios" class="list-unstyled"></ul>
+        <ul v-show="numcomentarios > index" v-for="(comentario, index) in comentarios" :key="index">
+          <li>
+            <article>
+              <header style="text-align:left">
+                <i class="bi bi-bookmark-check" style="top:0%;margin-top:0%">Cuenta verificada</i>
+                <figure class="avatar"><img :src="comentario.foto" alt=""></figure>
+                <address>
+                By <a href="#">{{comentario.nombre}} {{comentario.Apaterno}} {{comentario.Amaterno}}</a>
+                </address>
+                <time><sup>°</sup>{{comentario.fecha.split(' ')[0].split('-')[2]}}/{{comentario.fecha.split(' ')[0].split('-')[1]}}/{{comentario.fecha.split(' ')[0].split('-')[0]}}   @{{comentario.fecha.split(' ')[1].split(':')[0]}}:{{comentario.fecha.split(' ')[1].split(':')[1]}}</time>
+              </header>
+              <div class="comcont" style="text-align:justify">
+                <p>{{comentario.Mensaje}}</p>
+              </div>
+              <div class="row">
+                <p class="">{{comentario.valoracion}} estrellas {</p>
+                  <div v-for="n in 5" :key="n" class="gallery-outer" style="">
+                  <i v-if="comentario.valoracion>=n" class="bi bi-star-fill estrella" style="font-size: 1rem;"></i>
+                  <i v-else-if="comentario.valoracion%1!=0 && n-1<comentario.valoracion" class="bi bi-star-half estrella" style="font-size: 1rem;"></i>
+                  <i v-else class="bi bi-star estrella" style="font-size: 1rem;"></i>
+                </div><p class="gallery-outer">}</p>
+              </div>
+            </article>
+          </li>
+        </ul>
+        <div>
+          <button class="btn more" v-show="this.comentarios.length > numcomentarios" v-on:click="actualizarcomentarios">mostrar más</button>
+          <button class="btn more" v-show="numcomentarios > 3" v-on:click="actualizarcomentarios2">mostrar menos</button>
+        </div>
+        </div>
   </div>
-  </div>
-  <div class="container fo">
+  <div class="fo">
     <h2 style="margin-top:25px">Otros sitios similares</h2>
     <hr>
   <div class="gallery-outer" v-for="otrositio in otrositios" :key="otrositio.id">
@@ -154,6 +138,46 @@
     </div>
   </div>
   </div>
+  <footer id="footer" class="hoc clear">
+    <!-- ################################################################################################ -->
+    <div class="one_quarter first">
+      <h6 class="title" style="color:dimgray">Contacto</h6>
+      <address class="btmspace-30">
+      Codigo postal
+      <br>
+      29058
+      <br>
+      </address>
+      <ul class="nospace">
+        <li class="btmspace-10"><i class="fa fa-phone"></i> +521 (961) 123 68 17</li>
+        <li><i class="fa fa-envelope-o"></i> walter@mwc.com.mx</li>
+      </ul>
+    </div>
+    <div class="one_quarter">
+      <h6 class="title" style="color:dimgray">Augue suspendisse</h6>
+      <article>
+        <h2 class="nospace font-x1"><a href="#">Express Trip</a></h2>
+        <time class="font-xs" datetime="2045-04-06">06<sup>th</sup> April 2045</time>
+        <p>Maximus aliquet neque ac luctus elit praesent imperdiet dui arcu a feugiat tellus interdum ut aliquam.</p>
+      </article>
+    </div>
+    <div class="one_quarter">
+      <h6 class="title" style="color:dimgray">Sagittis interdum</h6>
+      <ul class="nospace linklist">
+        <li><a href="#">Quis justo luctus sodales</a></li>
+        <li><a href="#">Id commodo enim vivamus</a></li>
+        <li><a href="#">Mattis nisl et interdum</a></li>
+        <li><a href="#">Non urna a eros cursus</a></li>
+        <li><a href="#">Rutrum eleifend posuere</a></li>
+      </ul>
+    </div>
+    <div class="one_quarter">
+      <h6 class="title" style="color:dimgray">Phasellus ac risus</h6>
+      <p>Venenatis mauris in hendrerit posuere proin lacus massa luctus id iaculis id viverra.</p>
+      <p>Vestibulum nisi nullam vestibulum felis quis fringilla tincidunt nulla dapibus lectus.</p>
+    </div>
+    <!-- ################################################################################################ -->
+  </footer>
 </template>
 
 <script>
@@ -165,7 +189,7 @@ export default {
     return {
       numcomentarios: 3,
       confirmfav: '',
-      dato: 0,
+      dato: -1,
       catalogos: [],
       comentarios: [],
       sitios: [{
@@ -223,26 +247,33 @@ export default {
           this.palabra = this.encryp(usua + this.id + this.nombre + Date())
           setTimeout(() => {
             const imgData = new Image()
+            const imglogo = new Image()
             const doc = new JsPDF()
+            doc.addFont('bromellonavidadregular', 'bromellonavidadregular', 'normal')
+            doc.setFont('bromellonavidadregular')
             imgData.src = 'https://media.istockphoto.com/photos/german-stimulus-packages-after-the-corona-crisis-exchange-wooden-cube-picture-id1313171624?k=20&m=1313171624&s=612x612&w=0&h=N-xzDl1llX-1IlT8WzMruog7313DkWuIa9NL8nmJ6sY='
+            imglogo.src = 'https://media.istockphoto.com/photos/german-stimulus-packages-after-the-corona-crisis-exchange-wooden-cube-picture-id1313171624?k=20&m=1313171624&s=612x612&w=0&h=N-xzDl1llX-1IlT8WzMruog7313DkWuIa9NL8nmJ6sY='
             const qr = document.getElementById('elqr')
-            doc.addFont('Roboto-Bold.ttf', 'Roboto', 'normal')
-            doc.setFont('Roboto')
-            doc.addImage(imgData, 'png', 50, 30, 90, 60, 'mono')
+            doc.addImage(imgData, 'png', 55, 30, 90, 60, 'mono')
             doc.setFontSize(22)
             doc.text(70, 20, 'MWReservation')
             doc.setFontSize(14)
-            doc.text(20, 110, 'Comentarios: ' + comentario)
-            doc.text(20, 120, 'Tiempo reservado: ' + minutosR + ' minutos')
-            doc.text(20, 130, 'Fecha reservada: ' + new Date(fecha).toLocaleDateString('es-ES', this.options))
-            doc.text(20, 140, 'Hora reservada: ' + hora)
-            doc.text(20, 150, 'Lugares reservados: ' + personas)
-            doc.text(20, 160, 'Reservacion realizada por: ' + localStorage.getItem('nombre') +
+            doc.text(20, 110, 'Reservación realizada por: ' + localStorage.getItem('nombre') +
       ' ' + localStorage.getItem('Apaterno') + ' ' + localStorage.getItem('Amaterno'))
-            doc.text(70, 170, 'QR registrado para uso de reservación')
-            doc.addImage(qr, 'PNG', 50, 175, 100, 100)
+            doc.text(20, 115, 'Comentarios: ' + comentario)
+            doc.text(20, 140, 'Fecha reservada: ' + new Date(fecha).toLocaleDateString('es-ES', this.options))
+            doc.text(20, 145, 'Hora reservada: ' + hora)
+            doc.text(20, 150, 'Lugares reservados: ' + personas + ' lugares')
+            doc.text(55, 180, 'QR registrado para uso de reservación')
+            doc.addImage(qr, 'PNG', 55, 185, 100, 100)
+            doc.text(50, 280, 'Fecha de registro' + new Date().toLocaleDateString('es-ES', this.options))
+            doc.setFontSize(8)
+            doc.text(10, 285, this.palabra)
+            doc.setFontSize(14)
             doc.addPage()
-            doc.text(20, 20, 'Te gusto la aplicación?')
+            doc.text(20, 220, 'Te gusto la aplicación?')
+            doc.text(20, 20, 'Sitio: ' + this.nombre)
+            doc.addImage(imglogo, 'PNG', 20, 25, 50, 50)
             window.open(URL.createObjectURL(doc.output('blob')))
             // doc.save('Test.pdf')
             this.$swal('Reservacion realizada', 'Validación realizada', 'success')
@@ -269,7 +300,17 @@ export default {
       this.numcomentarios = this.numcomentarios - 3
     },
     mover (n) {
-      this.dato = n
+      if (n === 0) {
+        this.dato = this.dato - 1
+      } else {
+        this.dato = this.dato + 1
+      }
+      if (this.catalogos.length <= this.dato) {
+        this.dato = -1
+      }
+      if (this.dato < (-1)) {
+        this.dato = this.catalogos.length - 1
+      }
       console.log(n, this.dato)
     },
     nuevavaloracion () {
@@ -420,21 +461,21 @@ label{ color:grey;}
         const formdata = new FormData()
         formdata.append('IdSitio', sit)
         formdata.append('IdUsua', usua)
-        formdata.append('fav', this.confirmfav ? '0' : '1')
-        fetch('http://localhost/mwreservation/cambiofav.php', {
+        console.log(!this.confirmfav)
+        if (!this.confirmfav) {
+          formdata.append('fav', '1')
+        } else {
+          formdata.append('fav', '0')
+        }
+        await fetch('http://localhost/mwreservation/cambiofav.php', {
           method: 'POST',
           body: formdata
         }).then(
           respuest => respuest.json()
         ).then((datosRespuest) => {
           console.log('dato', datosRespuest)
-          try {
-            if (datosRespuest !== 'error') {
-              this.validarFav()
-              this.$swal('Sitio alterado', 'Modificacion de favorito', 'success')
-            }
-          } catch (e) {
-          }
+          this.validarFav()
+          this.$swal('Sitio alterado', 'Modificacion de favorito', 'success')
         }).catch(console.log)
       } else {
         this.$swal('Inicia sesión', 'operación anulada', 'info')
@@ -456,7 +497,7 @@ label{ color:grey;}
           console.log('dato', datosRespuest.favorite)
           this.confirmfav = false
           try {
-            if (datosRespuest.favorite !== '0') {
+            if (datosRespuest.favorite === '1') {
               this.confirmfav = true
               console.log('verdadero')
             }
@@ -521,63 +562,11 @@ label{ color:grey;}
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
-}
-.fo{
-  margin-bottom: 50px;
-}
-.limitacion{
-  width: 1080px;
-  background-color: goldenrod;
-  text-align: left;
-  padding-left: 5%;
-  padding-right: 5%;
-}
-.col{
-  padding-left: 5%;
-  margin-left: 5%;
-  padding-right: 5%;
-  margin-right: 5%;
-  margin-bottom: 5%;
-}
-.comentarios{
-  align-items: left;
-  padding-left: 0px;
-  width: 1080px;
-  padding-bottom: 50px;
-  background:white
-}
 .more{
   box-decoration-break: none;
 }
 .more:hover{
   text-decoration: underline;
-}
-
-.logo{
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  margin: 10px;
-}
-.cuerpotarjeta{
-  height: 55px;
-  text-align: justify;
-  text-overflow: ellipsis;
-  align-content: left;
-  align-items: left;
-}
-.tarjetas{
-  position:relative;
-  height: 125px;
-  width: 1000px;
-  margin-bottom: 25px;
-  border-radius: 0%;
-  text-align: justify;
 }
 .gallery-outer{
   display: inline-block;
@@ -597,55 +586,12 @@ label{ color:grey;}
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.textocard{
-  overflow: ellipsis;
-  text-align: left;
-}
+
 .estrella{
   color: red;
 }
-
-.espacio{
-  height: 500px;
-  width: 700px;
-}
-.tablacuerpo{
-  text-align: left;
-}
-.tablacabeza{
-  text-align: left;
-}
-.titulos {
-  margin-left: 30px;
-  text-align: left;
-  align-content: left;
-}
-.slider{
-  height: 500px;
-  background-color: rgb(238, 238, 238);
-  overflow: hidden;
-  width: 1085px;
-  contain:size;
-  position: relative;
-  scroll-snap-type: y mandatory;
-  margin-bottom: 20px;
-}
-.slidercontrol{
-  position:relative;
-  width: 1085px;
-  height: 3rem;
-  background-color: goldenrod;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-.imagen{
-  background-position: center;
-  background-size: contain;
-  position: flex;
-}
 .fo{
-  padding-bottom: 25px;
+  padding-bottom: 10px;
 }
 .valorar:hover{
   text-decoration: underline;
@@ -655,10 +601,11 @@ label{ color:grey;}
   height: 3rem;
   background-color: aliceblue;
   justify-content: center;
-  display: flex;
+  display: inline-block;
   width: 3rem;
   margin: 1rem 8;
   align-items: center;
+  justify-content: center;
 }
 .sliderlinks:hover{
   background-color: black;
@@ -669,13 +616,18 @@ label{ color:grey;}
   text-decoration: underline;
 }
 .reserva{
+  background-color: #A3BF00;
   color:white;
-  position: fixed;
-  bottom: 70px;
-  right: 40px;
+  position:fixed;
+  bottom: 70%;
+  right: 90%;
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border-color: black;
+}
+.reserva:hover{
+  background-color: white;
+  color: lightgray;
+  text-decoration: underline;
 }
 </style>

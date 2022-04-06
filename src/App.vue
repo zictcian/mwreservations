@@ -21,7 +21,7 @@ hr{
     width: 50%;
     border-color: black;
     border: black;
-    background-color: antiquewhite;
+    background-color: white;
     margin-left: 25%;
     margin-top: 50px;
   }
@@ -87,7 +87,7 @@ hr{
     font-family: 'arial', sans-serif;
   }
  body{
-    background: antiquewhite;
+    background: white;
     display: flex;
     font-family: 'Fira Sans', sans-serif;
   }

@@ -1,5 +1,176 @@
 <template>
-<body class="espacio">
+<div class="espacio" v-show="cliente=='2'">
+<div class="container-fluid">
+  <div class="contenedorimg">
+<img :src="foto? foto:`https://plataforma.mwcomenius.com.mx/assets/perfil/nuevo.png`" alt="" class="imagenfoto"></div>
+<div class="custom-file">
+    <input :disabled="disabled" type="file" class="custom-file-input">
+    <label class="custom-file-label" style="margin-left:42%;"><i class="bi bi-camera camara"></i></label>
+  </div>
+    <div class="form-group forma">
+        <h3>Datos empresariales {{sitios.nombre}}<hr></h3>
+        <div class="input-group mb-3">
+            <label for="Apaterno">Nombre</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+            <input :disabled="disabled" v-model="sitios.nombre" type="text" class="form-control inputwigth" placeholder="Nombre"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Apaterno">ubicación</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ## </span>
+          </div>
+            <input :disabled="disabled" v-model="sitios.ubicacion" type="text" class="form-control inputwigth" placeholder="Ubicación"/>
+        </div>
+        <div class="input-group mb-3">
+          <label for="Apaterno">Categoria</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <select :disabled="disabled" class="custom-select inputwigth" id="catselected">
+            <option selected>{{zonanombre}}</option>
+            <option :value="index" v-for="(zona ,index) in zonas" :key="index">{{index+1}}. {{zona.estado}}</option>
+          </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Anticipo</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+            <input :disabled="disabled" name="Amaterno" v-model="Amaterno" type="number" min="0" class="form-control inputwigth" placeholder="Segundo apellido"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Descripción</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="email">Ponderación</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text">Desactivado</span>
+          </div>
+            <input :disabled="true" name="email" v-model="email" type="number" class="form-control inputwigth" placeholder="Email"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Horario</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Teléfono</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <input :disabled="disabled" name="Amaterno" v-model="Amaterno" type="number" class="form-control inputwigth" placeholder="Segundo apellido"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Límite</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <input :disabled="disabled" name="Amaterno" v-model="Amaterno" type="number" class="form-control inputwigth" placeholder="Segundo apellido"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Mapa</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">¿Que harán?</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">En detalle</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Incluye</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+          <label for="Apaterno">No apto para</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <select :disabled="disabled" class="custom-select inputwigth" id="catselected">
+            <option selected>{{zonanombre}}</option>
+            <option :value="index" v-for="(zona ,index) in zonas" :key="index">{{index+1}}. {{zona.estado}}</option>
+          </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Precauciones por Covid-19</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Requisitos por Covid-19</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">¿Que llevar?</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">No permitido</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
+          <textarea id="descripcion" :disabled="disabled" class="form-control inputwigth" aria-label="With textarea"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="email">Email</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text">Desactivado</span>
+          </div>
+            <input :disabled="true" name="email" v-model="email" type="email" class="form-control inputwigth" placeholder="Email"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="password">Cambiar password</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ## </span>
+          </div>
+            <input :disabled="disabled" name="password" v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="passwordActual">Password actual</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled">*[ Verificar ]*</span>
+          </div>
+            <input :disabled="disabled" name="passwordActual" v-model="passwordActual" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
+        </div>
+        <div class="inputwigth error"><span class="" v-if="passwordError2">{{passwordError2}}</span></div>
+        <div class="btn-group inputwigth" role="group" aria-label="Basic example">
+          <button v-on:Click="disabled = !disabled" :disabled="!email" class="btn btn-primary mb-2">Editar</button>
+          <button :disabled="disabled" v-on:Click="postData" class="btn btn-primary mb-2">Modificar</button>
+        </div>
+    </div>
+</div>
+</div>
+<div class="espacio" v-show="cliente=='' || cliente==1">
 <div class="container-fluid">
   <div class="contenedorimg">
 <img :src="foto? foto:`https://plataforma.mwcomenius.com.mx/assets/perfil/nuevo.png`" alt="" class="imagenfoto"></div>
@@ -8,29 +179,47 @@
     <label class="custom-file-label" style="margin-left:37%;"><i class="bi bi-camera camara"></i></label>
   </div>
     <div class="form-group forma">
-        <h3 style="background-color: green">Datos personales<hr></h3>
+        <h3>Datos personales<hr></h3>
         <div class="input-group mb-3">
-            <label for="nombre">Nombre</label>
+            <label for="Apaterno">Nombre</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
             <input :disabled="disabled" name="nombre" v-model="nombre" type="text" class="form-control inputwigth" placeholder="Nombre"/>
         </div>
         <div class="input-group mb-3">
             <label for="Apaterno">Apellido Paterno</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ## </span>
+          </div>
             <input :disabled="disabled" name="Apaterno" v-model="Apaterno" type="text" class="form-control inputwigth" placeholder="Primer apellido"/>
         </div>
         <div class="input-group mb-3">
             <label for="Amaterno">Apellido Materno</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ##</span>
+          </div>
             <input :disabled="disabled" name="Amaterno" v-model="Amaterno" type="text" class="form-control inputwigth" placeholder="Segundo apellido"/>
         </div>
         <div class="input-group mb-3">
             <label for="email">Email</label>
-            <input :disabled="disabled" name="email" v-model="email" type="email" class="form-control inputwigth" placeholder="Email"/>
+          <div class="input-group-prepend">
+            <span class="input-group-text">Desactivado</span>
+          </div>
+            <input :disabled="true" name="email" v-model="email" type="email" class="form-control inputwigth" placeholder="Email"/>
         </div>
         <div class="input-group mb-3">
             <label for="password">Cambiar password</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled"> *Activado ## </span>
+          </div>
             <input :disabled="disabled" name="password" v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
         <div class="input-group mb-3">
             <label for="passwordActual">Password actual</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" v-show="disabled">Desactivado</span><span class="input-group-text" v-show="!disabled">*[ Verificar ]*</span>
+          </div>
             <input :disabled="disabled" name="passwordActual" v-model="passwordActual" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
         <div class="inputwigth error"><span class="" v-if="passwordError2">{{passwordError2}}</span></div>
@@ -39,18 +228,18 @@
         <button :disabled="disabled" v-on:Click="postData" class="btn btn-primary mb-2">Modificar</button>
         </div>
     </div>
-    <div class="cesion">
+</div>
+</div>
+<div class="cesion">
     <div class="card" style="width: 26rem;">
   <ul class="list-group list-group-flush">
     <li class="list-group-item"><i class="bi bi-person-square"></i> Cerrar sesión</li>
-    <li class="list-group-item" v-if="email">{{email}}</li>
-    <li class="list-group-item" v-if="!email"><a href="/login">Inicia sesión</a></li>
-    <li class="list-group-item"><button v-on:click="exit" class="btn btn-outline-danger"><i class="bi bi-x-octagon-fill"></i></button></li>
+    <li class="list-group-item" v-if="usuario.email">{{usuario.email}}</li>
+    <li class="list-group-item" v-if="!usuario.email"><a href="/login">Inicia sesión</a></li>
+    <li class="list-group-item"><button :disabled="!usuario.email" v-on:click="exit" class="btn btn-outline-danger"><i class="bi bi-x-octagon-fill"></i></button></li>
   </ul>
 </div>
     </div>
-</div>
-</body>
 </template>
 
 <script>
@@ -58,18 +247,51 @@ export default {
   name: 'UsuarioMW',
   data () {
     return {
-      nombre: localStorage.getItem('nombre'),
-      Apaterno: localStorage.getItem('Apaterno'),
-      Amaterno: localStorage.getItem('Amaterno'),
-      email: localStorage.getItem('correo'),
-      foto: localStorage.getItem('foto'),
-      password: '',
-      passwordActual: '',
-      passwordError2: '',
-      disabled: true
+      usuario: {
+        nombre: localStorage.getItem('nombre'),
+        Apaterno: localStorage.getItem('Apaterno'),
+        Amaterno: localStorage.getItem('Amaterno'),
+        email: localStorage.getItem('correo'),
+        foto: localStorage.getItem('foto'),
+        password: '',
+        passwordActual: '',
+        passwordError2: ''
+      },
+      sitios: [],
+      disabled: true,
+      cliente: ''
+    }
+  },
+  created: function () {
+    this.cliente = localStorage.getItem('nivel')
+    console.log(this.cliente)
+    if (this.cliente === '2') {
+      console.log('this.cliente')
+      this.traersitios()
     }
   },
   methods: {
+    async traersitios () {
+      const sit = localStorage.getItem('valor')
+      console.log(sit)
+      const formdata = new FormData()
+      formdata.append('id', sit)
+      fetch('http://localhost/mwreservation/getsitio.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        this.sitios = []
+        if (typeof datosRespuest.success === 'undefined') {
+          this.sitios = datosRespuest
+        }
+      }).catch(console.log)
+    },
+    splitedList (row) {
+      return (row !== null) ? row.split(',') : ''
+    },
     exit () {
       this.$swal.fire({
         title: '¡¡ ¿Te quieres quedar? !!',
@@ -88,7 +310,7 @@ export default {
         cancelButtonText: 'No',
         showCloseButton: true,
         showLoaderOnConfirm: true
-      }).then((result) => {
+      }).then(async (result) => {
         if (!result.value) {
           localStorage.setItem('valor', '0')
           localStorage.setItem('nombre', '')
@@ -99,7 +321,10 @@ export default {
           localStorage.setItem('foto', '')
           localStorage.setItem('zona', '')
           localStorage.setItem('zonaname', '')
-          this.$router.push({ path: '/' })
+          localStorage.setItem('nivel', '')
+          localStorage.setItem('cuenta', '')
+          await this.$router.push({ path: '/' })
+          this.$router.go(0)
         }
       })
     },
@@ -165,7 +390,6 @@ export default {
       if (localStorage.getItem('c') === passActual) {
         const formdata = new FormData()
         formdata.append('idUsua', localStorage.getItem('valor'))
-        formdata.append('correo', this.email)
         formdata.append('password', pass)
         formdata.append('nombre', this.nombre)
         formdata.append('Apaterno', this.Apaterno)
@@ -207,7 +431,7 @@ export default {
 }
 .inputwigth{
     width: 60%;
-    margin-left: 10px;
+    margin-left: 0px;
     margin-right: 10px;
 }
 label{
@@ -216,6 +440,7 @@ label{
     margin-left: 10px;
 }
 .btn{
+  justify-content: center;
   margin-left: 45%;
 }
 .imagenfoto{
@@ -240,7 +465,7 @@ label{
   margin-top: 0%;
 }
 .forma{
-  background-color: rgb(233, 178, 150);
+  background-color: rgb(242,247,235);
   align-content: center;
   align-items: center;
   margin-top: 25px;
@@ -248,8 +473,9 @@ label{
   margin-right: 15%;
 }
 .cesion{
-  display: flex;
-  align-items: center;
+  padding-top: 10px;
+  display:inline-block;
+  text-align: left;
   justify-content: center;
   padding-bottom: 70px;
 }

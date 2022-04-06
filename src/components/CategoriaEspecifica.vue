@@ -2,7 +2,7 @@
     <h1 v-if="sitios== ''">No hay sitios de {{categoria}}</h1>
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
     <h1 v-if="sitios!= ''">Sitios de {{categoria}}<hr></h1>
-  <div class="container fo">
+  <div class="fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
       <img class="card-img-top" :src="sitio.logo" alt="Card image cap">
@@ -94,11 +94,14 @@ export default {
   height: 250px;
 }
 .textocard{
-  height: 130px;
+  height: 100px;
   overflow: ellipsis;
   text-align: left;
 }
 .estrella{
   color: red;
+}
+.card{
+  background: rgb(192,185,123);
 }
 </style>

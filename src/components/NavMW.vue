@@ -1,48 +1,76 @@
 <template>
 <div>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <nav class="navbar navbar-expand navbar-light">
-      <a href="/"><i class="bi bi-house-fill colore" style="font-size: 1.5rem;color:black"></i></a>
-      <div class=""><input v-model="busqueda" class="typeahead form-control" type="text" placeholder="Search place"></div>
-      <button class="btn" v-on:click="buscar"><i class="fa fa-search"></i></button>
-      <div class="container">
-        <div class="collapse navbar-collapse">
-          <button class="btn2" v-on:click="Zonaquitar()"><i class="bi bi-trash"></i></button>
-          <select class="custom-select" style="width:300px;" id="zonaselected">
-                <option selected>{{zonanombre}}</option>
-                <option :value="index" v-for="(zona ,index) in zonas" :key="index">{{index+1}}. {{zona.estado}}</option>
-              </select>
-            <button class="btn" v-on:click="Zonaselec()"><i class="bi bi-arrow-right-circle"></i></button>
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a href="/inicio" class="nav-link"><i class="bi bi-shop-window colore"></i></a>
+  <div class="wrapper row0">
+  <div id="topbar" class="hoc clear">
+    <div class="fl_left">
+      <ul class="faico clear">
+        <li><abbr title="Home"><a href="/"><i class="bi bi-house-fill colore" style="font-size: 1.5rem;"></i></a></abbr></li>
+      </ul>
+    </div>
+    <!-- ################################################################################################ -->
+    <div class="fl_right">
+      <ul class="nospace inline pushright">
+          <li v-show="cliente=='2'">
+              <abbr title="Local"><a v-on:click="ir(this.dato, this.nombre)" class="nav-link"><i class="bi bi-card-heading colore" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
-            <li class="nav-item">
-              <a href="/fav" class="nav-link"><i class="bi bi-heart-fill colore"></i>Favoritos</a>
+            <li>
+              <abbr title="Lugares"><a href="/inicio" ><i class="bi bi-shop-window colore" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
-            <li class="nav-item">
-              <a href="/categorias" class="nav-link">Categorias</a>
+            <li >
+              <abbr title="Favoritos"><a href="/fav" ><i class="bi bi-heart-fill colore" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
-            <li class="nav-item">
-              <a href="/conocenos" class="nav-link">Conocenos</a>
+            <li>
+              <abbr title="Categorias"><a href="/categorias" ><i class="bi bi-bookmarks" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
-            <li class="nav-item">
-              <a href="/login" class="nav-link">Login</a>
+            <li>
+              <abbr title="Login"><a href="/login" ><i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
-            <li class="nav-item">
-              <a href="/carrito" class="nav-link"><i class="bi bi-cart colore"></i></a>
+            <li>
+              <abbr title="Reservaciones"><a href="/carrito" ><i class="bi bi-cart colore" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
-            <li class="nav-item">
-              <a href="/usuario" class="nav-link"><i class="bi bi-person-circle colore"></i></a>
+            <li>
+              <abbr title="Cuenta"><a href="/usuario" ><i v-show="cliente!='2'" class="bi bi-person-circle colore" style="font-size: 1.5rem;"></i><i v-show="cliente=='2'" class="bi bi-building"></i></a></abbr>
             </li>
-          </ul>
-        </div>
+      </ul>
+    </div>
+    <!-- ################################################################################################ -->
+  </div>
+  <div class="wrapper row1">
+    <header id="header" class="hoc clear">
+      <!-- ################################################################################################ -->
+      <div id="logo" class="fl_left">
+        <h1><a href="index.html">Express Trip</a></h1>
       </div>
-    </nav>
+      <nav id="mainav" class="fl_right">
+        <ul class="clear">
+          <li><a class="drop" href="#">Zonas</a>
+            <ul>
+              <li>
+                <i v-on:click="Zonaquitar()" class="bi bi-trash">Quitar zona</i>
+              </li>
+              <li><input v-model="busqueda" class="form-control" type="text" placeholder="Buscar zona">
+              </li>
+              <li><i v-on:click="Zonaselec()" class="bi bi-arrow-right-circle">Cargar zona</i></li>
+            </ul>
+          </li>
+          <li><a class="drop" href="#">Busqueda</a>
+            <ul>
+              <li><input v-model="busqueda" class="form-control" type="text" placeholder="Buscar lugar">
+              </li>
+              <li><i v-on:click="buscar" class="fa fa-search">Buscar</i></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <!-- ################################################################################################ -->
+    </header>
+  </div>
+</div>
     </div>
 </template>
 
 <script>
+import '../layout/styles/layout.css'
 export default {
   name: 'NavMW',
   data () {
@@ -50,13 +78,27 @@ export default {
       busqueda: '',
       zonas: [],
       zonafija: localStorage.getItem('zona'),
-      zonanombre: localStorage.getItem('zonaname')
+      zonanombre: localStorage.getItem('zonaname'),
+      cliente: localStorage.getItem('nivel'),
+      nombre: localStorage.getItem('nombre'),
+      dato: localStorage.getItem('valor')
     }
   },
   created: function () {
     this.traersitios()
   },
   methods: {
+    encryp: function (palabra) {
+      const palabraencryp = btoa(palabra)
+      console.log(palabra)
+      console.log(palabraencryp)
+      return palabraencryp
+    },
+    async ir (dato, nombre) {
+      dato = this.encryp(dato)
+      await this.$router.push({ name: 'TarjetaMW', params: { nombre: nombre, id: dato } })
+      this.$router.go(0)
+    },
     traersitios () {
       const formdata = new FormData()
       formdata.append('IdUsua', localStorage.getItem('valor'))
@@ -100,34 +142,4 @@ export default {
 </script>
 
 <style scoped>
-
-.typeahead{
-  margin-left: 10%;
-  width: 100%;
-  border-bottom-right-radius: 0%;
-}
-button {
-  background-color: orange; /* Blue background */
-  border: none; /* Remove borders */
-  color: white; /* White text */
-  padding: 8px 12px; /* Some padding */
-  font-size: 14px; /* Set a font size */
-  cursor: pointer; /* Mouse pointer on hover */
-  border-radius: 0%;
-}
-.btn:hover {
-  background-color: green;
-}
-.btn2:hover {
-  background-color: rgb(180, 0, 0);
-  color: black;
-}
-.nav-item:hover{
-  color: black;
-  background-color: lightgray;
-  text-decoration: underline;
-}
-.colore:hover{
-  color: red;
-}
 </style>

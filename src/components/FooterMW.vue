@@ -1,11 +1,7 @@
 <template>
   <footer>
-    <table>
-      <tr>
-        <th>Copyright © 2021. Todos los derechos reservados.</th>
-        <th>Version: 1.0.0</th>
-      </tr>
-    </table>
+    <h6 class="display-6">Copyright © 2021. Todos los derechos reservados.</h6>
+    <p>Version: 1.0.0</p>
   </footer>
 </template>
 
@@ -17,22 +13,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
  footer{
-  background-color: rgb(214, 214, 214);
+  background-color: rgb(242,247,235);
   border: black;
   height: 50px;
   width: 100%;

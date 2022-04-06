@@ -13,7 +13,13 @@ import BusquedaSitio from '@/components/BusquedaSitio.vue'
 import TarjetaMW from '@/components/TarjetaMW.vue'
 import NotFoundMW from '@/components/NotFound.vue'
 import ReservacionMW from '@/components/ReservacionMW.vue'
+import SitioRegister from '@/components/SitioRegister.vue'
 const routes = [
+  {
+    path: '/newsitio',
+    name: 'SitioRegister',
+    component: SitioRegister
+  },
   {
     path: '/Reservacion/:nombre/:id',
     name: 'ReservacionMW',

@@ -57,7 +57,7 @@
 
 <script>
 export default {
-  name: 'RegisterMW',
+  name: 'SitioRegister',
   data () {
     return {
       nombre: '',

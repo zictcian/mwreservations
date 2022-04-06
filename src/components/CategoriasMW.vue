@@ -66,4 +66,7 @@ export default {
   width: 240px;
   height: 100px;
 }
+.card-header{
+  background-color: rgb(105,149,89);
+}
 </style>

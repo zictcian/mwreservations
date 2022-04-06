@@ -187,6 +187,7 @@ export default {
             if (datosRespuest) {
               this.$swal('Exito', 'Reservación realizada', 'success')
               this.hacerpdf(comentario, '2', fecha, '2:20', personas)
+              this.a(formdata)
               this.$router.push({ name: 'CarritoMW' })
             } else {
               this.$swal('Error interno', 'Fallo al reservar sitio', 'error')
@@ -199,6 +200,18 @@ export default {
       } else {
         this.$swal('Inicia sesión', 'operación anulada', 'info')
       }
+    },
+    async a (data) {
+      data.append('token', '12345')
+      data.append('actividad', 'Creación de cuenta MWReservation')
+      await fetch('http://localhost/mwreservation/enviarmail.php', {
+        method: 'POST',
+        body: data
+      }).then(
+        respuest => respuest.json()
+      ).then(datosRespuest => {
+        console.log(datosRespuest)
+      }).catch(console.log)
     },
     hacerpdf (comentario, minutosR, fecha, hora, personas) {
       const doc = new JsPDF()
