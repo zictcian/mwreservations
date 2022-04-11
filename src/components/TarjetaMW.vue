@@ -7,10 +7,10 @@
     <i v-if="sitios== ''" class="bi bi-emoji-frown" style="font-size: 8rem;"></i>
     <span v-show="false"><vue-qr id="elqr" :text="palabra" :size="200"></vue-qr></span>
     <div class="group">
-        <h1><button v-on:click="hacerpdf('comentario','70','2022/03/28','08:22','2')" class="btn valorar">Pruebas</button>
+        <h1>
         <button v-show="!confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart" style="color:black"></i> Agregar a favoritos</a></button>
     <button v-show="confirmfav" v-on:click="addfav" class="btn add"><a><i class="bi bi-heart-fill" style="color:red"></i> Eliminar de favoritos</a></button>
-    {{sitios.nombre}}</h1>
+    {{sitios.nombre}} <button v-on:click="hacerpdf('comentario','70','2022/03/28','08:22','2')" class="btn valorar">Pruebas</button></h1>
       <div class="row">
         <button v-on:click="mover(0)" class="one_third sliderlinks"><i class="bi bi-arrow-left"></i></button>
         <button v-on:click="mover(1)" class="one_third sliderlinks"><i class="bi bi-arrow-right"></i></button>
@@ -99,7 +99,7 @@
                 <p>{{comentario.Mensaje}}</p>
               </div>
               <div class="row">
-                <p class="">{{comentario.valoracion}} estrellas {</p>
+                <p style="margin-left:15px">{{comentario.valoracion}} estrellas {</p>
                   <div v-for="n in 5" :key="n" class="gallery-outer" style="">
                   <i v-if="comentario.valoracion>=n" class="bi bi-star-fill estrella" style="font-size: 1rem;"></i>
                   <i v-else-if="comentario.valoracion%1!=0 && n-1<comentario.valoracion" class="bi bi-star-half estrella" style="font-size: 1rem;"></i>
@@ -120,7 +120,8 @@
     <hr>
   <div class="gallery-outer" v-for="otrositio in otrositios" :key="otrositio.id">
     <div class="card p-3" style="width: 18rem;">
-      <img class="card-img-top" :src="otrositio.logo" alt="Card image cap">
+      <img class="card-img-top" v-show="otrositio.logo" :src="otrositio.logo" alt="Card image cap" style="  width: 220px;height: 150px;">
+      <img class="card-img-top" v-show="!otrositio.logo" src="https://zictcian.000webhostapp.com/default.png" alt="Card image cap" style="  width: 220px;height: 150px;">
       <div class="card-body bodycard2">
         <h5 class="card-title">{{otrositio.nombre}}</h5>
       </div>
@@ -138,46 +139,6 @@
     </div>
   </div>
   </div>
-  <footer id="footer" class="hoc clear">
-    <!-- ################################################################################################ -->
-    <div class="one_quarter first">
-      <h6 class="title" style="color:dimgray">Contacto</h6>
-      <address class="btmspace-30">
-      Codigo postal
-      <br>
-      29058
-      <br>
-      </address>
-      <ul class="nospace">
-        <li class="btmspace-10"><i class="fa fa-phone"></i> +521 (961) 123 68 17</li>
-        <li><i class="fa fa-envelope-o"></i> walter@mwc.com.mx</li>
-      </ul>
-    </div>
-    <div class="one_quarter">
-      <h6 class="title" style="color:dimgray">Augue suspendisse</h6>
-      <article>
-        <h2 class="nospace font-x1"><a href="#">Express Trip</a></h2>
-        <time class="font-xs" datetime="2045-04-06">06<sup>th</sup> April 2045</time>
-        <p>Maximus aliquet neque ac luctus elit praesent imperdiet dui arcu a feugiat tellus interdum ut aliquam.</p>
-      </article>
-    </div>
-    <div class="one_quarter">
-      <h6 class="title" style="color:dimgray">Sagittis interdum</h6>
-      <ul class="nospace linklist">
-        <li><a href="#">Quis justo luctus sodales</a></li>
-        <li><a href="#">Id commodo enim vivamus</a></li>
-        <li><a href="#">Mattis nisl et interdum</a></li>
-        <li><a href="#">Non urna a eros cursus</a></li>
-        <li><a href="#">Rutrum eleifend posuere</a></li>
-      </ul>
-    </div>
-    <div class="one_quarter">
-      <h6 class="title" style="color:dimgray">Phasellus ac risus</h6>
-      <p>Venenatis mauris in hendrerit posuere proin lacus massa luctus id iaculis id viverra.</p>
-      <p>Vestibulum nisi nullam vestibulum felis quis fringilla tincidunt nulla dapibus lectus.</p>
-    </div>
-    <!-- ################################################################################################ -->
-  </footer>
 </template>
 
 <script>
@@ -390,7 +351,7 @@ label{ color:grey;}
                 formdata.append('IdUsua', usua)
                 formdata.append('comentario', comen)
                 formdata.append('ponderacion', ponde)
-                fetch('http://localhost/mwreservation/agregarcomentario.php', {
+                fetch('https://expresstrip.mwcomeniusdocente.com/app/agregarcomentario.php', {
                   method: 'POST',
                   body: formdata
                 }).then(
@@ -437,7 +398,7 @@ label{ color:grey;}
       const sit = await this.desencryp(this.id)
       const formdata = new FormData()
       formdata.append('Idsitio', sit)
-      fetch('http://localhost/mwreservation/Tarjeta.php', {
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/Tarjeta.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -467,7 +428,7 @@ label{ color:grey;}
         } else {
           formdata.append('fav', '0')
         }
-        await fetch('http://localhost/mwreservation/cambiofav.php', {
+        await fetch('https://expresstrip.mwcomeniusdocente.com/app/cambiofav.php', {
           method: 'POST',
           body: formdata
         }).then(
@@ -488,7 +449,7 @@ label{ color:grey;}
         const formdata = new FormData()
         formdata.append('IdSitio', sit)
         formdata.append('IdUsua', usua)
-        fetch('http://localhost/mwreservation/validfav.php', {
+        fetch('https://expresstrip.mwcomeniusdocente.com/app/validfav.php', {
           method: 'POST',
           body: formdata
         }).then(
@@ -510,7 +471,7 @@ label{ color:grey;}
       const formdata = new FormData()
       const sit = await this.desencryp(this.id)
       formdata.append('IdSitio', sit)
-      await fetch('http://localhost/mwreservation/home2.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/home2.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -527,7 +488,7 @@ label{ color:grey;}
       const sit = await this.desencryp(this.id)
       const formdata = new FormData()
       formdata.append('Idsitio', sit)
-      fetch('http://localhost/mwreservation/catalogo.php', {
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/catalogo.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -544,7 +505,7 @@ label{ color:grey;}
       const sit = await this.desencryp(this.id)
       const formdata = new FormData()
       formdata.append('idsitio', sit)
-      fetch('http://localhost/mwreservation/comentarios.php', {
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/comentarios.php', {
         method: 'POST',
         body: formdata
       }).then(

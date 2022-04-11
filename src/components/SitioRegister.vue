@@ -2,7 +2,7 @@
 <body>
 <div class="container-fluid">
     <div class="form-group forma">
-        <h3>Register</h3>
+        <h3>Nuevo sitio</h3>
         <p id="resultado">Cuenta de: <span class="badge badge-pill badge-success">{{nombre}} {{Apaterno}} {{Amaterno}}</span></p>
         <hr>
         <div class="input-group mb-3">
@@ -47,12 +47,40 @@
             </div>
             <input name="password2" v-model="password2" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Nombre del local</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="bi bi-shop"></i></span>
+            </div>
+            <input name="Local" v-model="local" type="text" class="form-control inputwigth" placeholder="Nombre del local"/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Estado del local</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="bi bi-shop"></i></span>
+            </div>
+            <select class="custom-select inputwigth" id="zonaselected">
+              <option selected></option>
+                <option :value="zona.id" v-for="(zona ,index) in zonas" :key="index">{{index+1}}. {{zona.estado}}</option>
+              </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="Amaterno">Categoria del local</label>
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="bi bi-tag"></i></span>
+            </div>
+            <select class="custom-select inputwigth" id="catselected">
+                <option selected></option>
+                <option :value="categoria.id" v-for="(categoria ,index) in categorias" :key="index">{{index+1}}. {{categoria.categoria}}</option>
+              </select>
+        </div>
         <div class="inputwigth error"><span class="" v-if="passwordError2">{{passwordError2}}</span></div>
         <button v-on:Click="postData" class="btn btn-primary mb-2">Registrar</button><br>
-        <a href="/login" class="btn1">ya tengo cuenta! gracias</a>
+        <a href="/login" class="btn2">ya tengo cuenta! gracias</a>
     </div>
 </div>
 </body>
+<br>
 </template>
 
 <script>
@@ -66,10 +94,49 @@ export default {
       email: '',
       password: '',
       password2: '',
-      passwordError2: ''
+      passwordError2: '',
+      local: '',
+      zonas: [],
+      categorias: []
     }
   },
+  created: function () {
+    this.traerzonas()
+    this.traercat()
+  },
   methods: {
+    traerzonas () {
+      const formdata = new FormData()
+      formdata.append('IdUsua', localStorage.getItem('valor'))
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/zone.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        this.zonas = []
+        if (typeof datosRespuest[0].success === 'undefined') {
+          this.zonas = datosRespuest
+        }
+      }).catch(console.log)
+    },
+    traercat () {
+      const formdata = new FormData()
+      formdata.append('IdUsua', localStorage.getItem('valor'))
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/categorias.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        this.categorias = []
+        if (typeof datosRespuest[0].success === 'undefined') {
+          this.categorias = datosRespuest
+        }
+      }).catch(console.log)
+    },
     encryp: async function (palabra) {
       const palabraencryp = btoa(palabra)
       console.log(palabra)
@@ -101,9 +168,22 @@ export default {
       if (this.password !== this.password2) {
         this.passwordError2 = this.passwordError2 + ' *Las contraseñas deben coincidir'
       }
+      if (this.local === '') {
+        this.passwordError2 = this.passwordError2 + ' *El nombre del local es obligatorio'
+      }
+      const newzona = document.getElementById('zonaselected').value
+      console.log(newzona)
+      if (newzona === '') {
+        this.passwordError2 = this.passwordError2 + ' *Selecciona una zona'
+      }
+      const newcat = document.getElementById('catselected').value
+      console.log(newcat)
+      if (newcat === '') {
+        this.passwordError2 = this.passwordError2 + ' *Selecciona una categoria'
+      }
       if (this.passwordError2 === '') {
         this.password = await this.encryp(this.password)
-        this.prueba()
+        this.prueba(newzona, newcat)
       } else {
         this.$swal('error', 'Se detecto una inconsistencia', 'info')
       }
@@ -111,7 +191,7 @@ export default {
     async a (data) {
       data.append('token', '12345')
       data.append('actividad', 'Creación de cuenta MWReservation')
-      await fetch('http://localhost/mwreservation/enviarmail.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/enviarmail.php', {
         method: 'POST',
         body: data
       }).then(
@@ -120,7 +200,7 @@ export default {
         console.log(datosRespuest)
       }).catch(console.log)
     },
-    prueba () {
+    prueba (newzona, newcat) {
       this.$swal.fire({
         title: 'Verficación',
         text: '¿Tus datos ya están verificados?',
@@ -132,24 +212,27 @@ export default {
         showLoaderOnConfirm: true
       }).then((result) => {
         if (result.value) {
-          this.register()
+          this.register(newzona, newcat)
         } else {
           this.$swal('Cancelado', 'operación cancelada', 'info')
         }
       })
     },
-    async register () {
+    async register (newzona, newcat) {
       const formdata = new FormData()
       formdata.append('correo', this.email)
       formdata.append('password', this.password)
       formdata.append('nombre', this.nombre)
       formdata.append('Apaterno', this.Apaterno)
       formdata.append('Amaterno', this.Amaterno)
-      await fetch('http://localhost/mwreservation/registrarse.php', {
+      formdata.append('local', this.local)
+      formdata.append('zona', newzona)
+      formdata.append('cat', newcat)
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/registrarsitio.php', {
         method: 'POST',
         body: formdata
       }).then(
-        respuest => respuest.json()
+        respuest => respuest.text()
       ).then((datosRespuest) => {
         console.log(datosRespuest)
         if (datosRespuest === 'error') {
@@ -161,7 +244,7 @@ export default {
         }
       }).catch(e => {
         console.log(e)
-        this.$swal('Cancelado', 'operación cancelada', 'info')
+        this.$swal('Error', 'No creado', 'info')
       })
     }
   }
@@ -188,6 +271,17 @@ body{
 .btn{
   margin-left: 45%;
 }
+.btn2{
+  display: flex;
+  text-align: center;
+  vertical-align: top;
+  margin: 0 0 1rem;
+  align-items: start;
+  justify-content: center;
+}
+.btn2:hover{
+  text-decoration: underline;
+}
 .btn1{
   margin-left: 40%;
   text-decoration: underline;
@@ -205,7 +299,7 @@ body{
   background-color: rgb(242,247,235);
   align-content: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 50px;
   margin-left: 15%;
   margin-right: 15%;
 }

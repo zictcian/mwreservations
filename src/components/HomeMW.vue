@@ -5,219 +5,21 @@
 <link href="../layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
 </head>
 <body id="top">
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- Top Background Image Wrapper -->
-<div class="bgded overlay" style="background-image:url('../images/demo/backgrounds/01.png');">
-  <!-- ################################################################################################ -->
-  <!-- ################################################################################################ -->
-  <!-- ################################################################################################ -->
-  <!-- ################################################################################################ -->
+
+<div class="bgded overlay iniciofoto">
   <div id="pageintro" class="hoc clear">
-    <!-- ################################################################################################ -->
     <article>
-      <h2 class="heading">Vivamus sed ligula tortor quisque</h2>
-      <p>Ut eu viverra sem ultricies bibendum leo ut mollis</p>
+      <h2 class="heading">Todo lo que buscas en tu viaje</h2>
+      <p>Sitio de reservaciones en linea</p>
       <footer>
         <ul class="nospace inline pushright">
-          <li><a class="btn" href="#">Ullamcorper</a></li>
-          <li><a class="btn inverse" href="#">Tincidunt</a></li>
+          <li><a class="btn" href="/register">Crear una cuenta</a></li>
+          <li><a class="btn inverse" href="/newsitio">añade tu sitio</a></li>
         </ul>
       </footer>
     </article>
-    <!-- ################################################################################################ -->
-  </div>
-  <!-- ################################################################################################ -->
-</div>
-<!-- End Top Background Image Wrapper -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper row3">
-  <main class="hoc container clear">
-    <!-- main body -->
-    <!-- ################################################################################################ -->
-    <div class="group">
-      <div class="one_third first"><a href="#"><img src="images/demo/400x500.png" alt=""></a></div>
-      <div class="two_third">
-        <div class="btmspace-50">
-          <h3 class="heading">Eget egestas odio donec</h3>
-          <p class="nospace">Praesent urna turpis semper non eros sed accumsan venenatis felis donec rhoncus tincidunt arcu sit amet aliquet vestibulum imperdiet laoreet sapien quis molestie integer tincidunt mauris at placerat congue lectus justo.</p>
-        </div>
-        <ul class="fa-ul clear">
-          <li class="one_half first"><i class="fa-li fa fa-globe"></i>
-            <h6 class="heading btmspace-10 font-x1"><a href="#">Gravida nisl</a></h6>
-            <p>Lacus vel eros imperdiet odio sed porta arcu luctus aliquam.</p>
-          </li>
-          <li class="one_half"><i class="fa-li fa fa-unlink"></i>
-            <h6 class="heading btmspace-10 font-x1"><a href="#">At aenean mattis</a></h6>
-            <p>Eros vitae tristique bibendum proin justo vel tortor feugiat.</p>
-          </li>
-          <li class="one_half first"><i class="fa-li fa fa-whatsapp"></i>
-            <h6 class="heading btmspace-10 font-x1"><a href="#">Leo mi elementum</a></h6>
-            <p>Ac sem sed malesuada vehicula mi quisque eget tortor quam.</p>
-          </li>
-          <li class="one_half"><i class="fa-li fa fa-ils"></i>
-            <h6 class="heading btmspace-10 font-x1"><a href="#">Nec eget vulputate</a></h6>
-            <p>Efficitur diam fusce ac felis metus sem quam fermentum iaculis.</p>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- ################################################################################################ -->
-    <!-- / main body -->
-    <div class="clear"></div>
-  </main>
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper">
-  <section id="shout" class="hoc container clear">
-    <!-- ################################################################################################ -->
-    <div class="one_quarter first"><a class="btn" href="#">Consectetur gravida</a></div>
-    <div class="three_quarter">
-      <h2 class="heading btmspace-10">Dolor nec malesuada etiam erat ipsum</h2>
-      <p class="nospace">Nam dictum egestas lacus in iaculis tortor malesuada vitae duis malesuada tortor lacinia erat.</p>
-    </div>
-    <!-- ################################################################################################ -->
-  </section>
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper bgded" style="background-image:url('images/demo/backgrounds/02.png');">
-  <div class="hoc split clear">
-    <article class="box clear">
-      <!-- ################################################################################################ -->
-      <h6 class="heading">Facilisis malesuada odio</h6>
-      <p class="btmspace-30">Diam quisque urna odio ornare ac nisl dictum varius venenatis leo nunc magna velit posuere ut mollis ac consequat et lectus fusce pharetra consequat&hellip;</p>
-      <footer><a class="btn inverse" href="#">Read More</a></footer>
-      <!-- ################################################################################################ -->
-    </article>
   </div>
 </div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper bgded overlay" style="background-image:url('images/demo/backgrounds/03.png');">
-  <div class="hoc container clear">
-    <!-- ################################################################################################ -->
-    <div class="testimonial clear center"><img class="circle btmspace-30" src="images/demo/60x60.png" alt="">
-      <blockquote>Rhoncus orci a porttitor nunc elit et neque suspendisse potenti nunc ut dui ut lacus pulvinar pulvinar suspendisse ex quam vehicula et sollicitudin ac efficitur a est donec et rutrum enim cras.</blockquote>
-      <div><strong>A.Doe</strong><br>
-        <em>Job / Title</em></div>
-    </div>
-    <!-- ################################################################################################ -->
-  </div>
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper row3">
-  <section class="hoc container clear">
-    <!-- ################################################################################################ -->
-    <div class="btmspace-80 center">
-      <h3 class="nospace">Eget vehicula sapien</h3>
-      <p class="nospace">A lacus blandit sodales mi a facilisis quam cras tincidunt.</p>
-    </div>
-    <div class="group">
-      <article class="one_quarter first">
-        <time class="block font-xs" datetime="2045-04-06">April 6, 2045</time>
-        <h4 class="nospace font-x1">Auctor nulla lectus</h4>
-        <p class="btmspace-30">Feugiat ac praesent dignissim metus ut tellus convallis non varius nulla accumsan&hellip;</p>
-        <a href="#"><img class="btmspace-30" src="images/demo/380x320.png" alt=""></a>
-        <footer><a href="#">Read More &raquo;</a></footer>
-      </article>
-      <article class="one_quarter">
-        <time class="block font-xs" datetime="2045-04-05">April 5, 2045</time>
-        <h4 class="nospace font-x1">Augue congue et</h4>
-        <p class="btmspace-30">Venenatis nec porttitor vel metus phasellus venenatis ex ac bibendum dictum&hellip;</p>
-        <a href="#"><img class="btmspace-30" src="images/demo/380x320.png" alt=""></a>
-        <footer><a href="#">Read More &raquo;</a></footer>
-      </article>
-      <article class="one_quarter">
-        <time class="block font-xs" datetime="2045-04-04">April 4, 2045</time>
-        <h4 class="nospace font-x1">Libero justo luctus</h4>
-        <p class="btmspace-30">Sed congue odio venenatis fusce purus quam lacinia sed sem a viverra mollis&hellip;</p>
-        <a href="#"><img class="btmspace-30" src="images/demo/380x320.png" alt=""></a>
-        <footer><a href="#">Read More &raquo;</a></footer>
-      </article>
-      <article class="one_quarter">
-        <time class="block font-xs" datetime="2045-04-03">April 3, 2045</time>
-        <h4 class="nospace font-x1">Luctus consequat</h4>
-        <p class="btmspace-30">Eget sed blandit eros semper vulputate lorem a efficitur purus aenean leo&hellip;</p>
-        <a href="#"><img class="btmspace-30" src="images/demo/380x320.png" alt=""></a>
-        <footer><a href="#">Read More &raquo;</a></footer>
-      </article>
-    </div>
-    <!-- ################################################################################################ -->
-  </section>
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper row4">
-  <footer id="footer" class="hoc clear">
-    <!-- ################################################################################################ -->
-    <div class="one_quarter first">
-      <h6 class="title">Mauris ut tempus</h6>
-      <address class="btmspace-30">
-      Street Name &amp; Number<br>
-      Town<br>
-      Postcode/Zip
-      </address>
-      <ul class="nospace">
-        <li class="btmspace-10"><i class="fa fa-phone"></i> +00 (123) 456 7890</li>
-        <li><i class="fa fa-envelope-o"></i> info@domain.com</li>
-      </ul>
-    </div>
-    <div class="one_quarter">
-      <h6 class="title">Augue suspendisse</h6>
-      <article>
-        <h2 class="nospace font-x1"><a href="#">Vestibulum augue at</a></h2>
-        <time class="font-xs" datetime="2045-04-06">Friday, 6<sup>th</sup> April 2045</time>
-        <p>Maximus aliquet neque ac luctus elit praesent imperdiet dui arcu a feugiat tellus interdum ut aliquam.</p>
-      </article>
-    </div>
-    <div class="one_quarter">
-      <h6 class="title">Sagittis interdum</h6>
-      <ul class="nospace linklist">
-        <li><a href="#">Quis justo luctus sodales</a></li>
-        <li><a href="#">Id commodo enim vivamus</a></li>
-        <li><a href="#">Mattis nisl et interdum</a></li>
-        <li><a href="#">Non urna a eros cursus</a></li>
-        <li><a href="#">Rutrum eleifend posuere</a></li>
-      </ul>
-    </div>
-    <div class="one_quarter">
-      <h6 class="title">Phasellus ac risus</h6>
-      <p>Venenatis mauris in hendrerit posuere proin lacus massa luctus id iaculis id viverra.</p>
-      <p>Vestibulum nisi nullam vestibulum felis quis fringilla tincidunt nulla dapibus lectus.</p>
-    </div>
-    <!-- ################################################################################################ -->
-  </footer>
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<div class="wrapper row5">
-  <div id="copyright" class="hoc clear">
-    <!-- ################################################################################################ -->
-    <p class="fl_left">Copyright &copy; 2016 - All Rights Reserved - <a href="#">Domain Name</a></p>
-    <p class="fl_right">Template by <a target="_blank" href="http://www.os-templates.com/" title="Free Website Templates">OS Templates</a></p>
-    <!-- ################################################################################################ -->
-  </div>
-</div>
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<!-- ################################################################################################ -->
-<a id="backtotop" href="#top"><i class="fa fa-chevron-up"></i></a>
-<!-- JAVASCRIPTS -->
 </body>
 </template>
 
@@ -240,4 +42,9 @@ export default {
 </script>
 
 <style scoped>
+.iniciofoto{
+  background-image: url("../assets/Tripnombre.jpeg");
+  background-repeat: no-repeat;
+  background-size:cover;
+}
 </style>

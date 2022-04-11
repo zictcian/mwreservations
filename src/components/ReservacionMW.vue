@@ -114,7 +114,7 @@ export default {
       formdata.append('fecha', defecha)
       formdata.append('dia', newfecha)
       console.log(newfecha)
-      await fetch('http://localhost/mwreservation/prereservahorario.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/prereservahorario.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -141,7 +141,7 @@ export default {
       const sit = await this.desencryp(this.id)
       const formdata = new FormData()
       formdata.append('Idsitio', sit)
-      await fetch('http://localhost/mwreservation/prereserva.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/prereserva.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -176,7 +176,7 @@ export default {
         formdata.append('IdHorario', elhorario)
         formdata.append('personas', personas)
         formdata.append('qr', palabra)
-        await fetch('http://localhost/mwreservation/hacerreservacion.php', {
+        await fetch('https://expresstrip.mwcomeniusdocente.com/app/hacerreservacion.php', {
           method: 'POST',
           body: formdata
         }).then(
@@ -204,7 +204,7 @@ export default {
     async a (data) {
       data.append('token', '12345')
       data.append('actividad', 'Creación de cuenta MWReservation')
-      await fetch('http://localhost/mwreservation/enviarmail.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/enviarmail.php', {
         method: 'POST',
         body: data
       }).then(

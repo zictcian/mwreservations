@@ -48,11 +48,12 @@
             <input name="password2" v-model="password2" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
         <div class="inputwigth error"><span class="" v-if="passwordError2">{{passwordError2}}</span></div>
-        <button v-on:Click="postData" class="btn btn-primary mb-2">Registrar</button><br>
-        <a href="/login" class="btn1">ya tengo cuenta! gracias</a>
+        <button v-on:Click="postData" class="btn btn-primary mb-3">Registrar</button><br>
+        <a href="/login" class="btn2">ya tengo cuenta! gracias</a>
     </div>
 </div>
 </body>
+<br>
 </template>
 
 <script>
@@ -111,7 +112,7 @@ export default {
     async a (data) {
       data.append('token', '12345')
       data.append('actividad', 'Creación de cuenta MWReservation')
-      await fetch('http://localhost/mwreservation/enviarmail.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/enviarmail.php', {
         method: 'POST',
         body: data
       }).then(
@@ -145,7 +146,7 @@ export default {
       formdata.append('nombre', this.nombre)
       formdata.append('Apaterno', this.Apaterno)
       formdata.append('Amaterno', this.Amaterno)
-      await fetch('http://localhost/mwreservation/registrarse.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/registrarse.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -188,10 +189,16 @@ body{
 .btn{
   margin-left: 45%;
 }
-.btn1{
-  margin-left: 40%;
-  text-decoration: underline;
+.btn2{
+  display: flex;
   text-align: center;
+  vertical-align: top;
+  margin: 0 0 1rem;
+  align-items: start;
+  justify-content: center;
+}
+.btn2:hover{
+  text-decoration: underline;
 }
 .error{
   color: red;
@@ -205,7 +212,7 @@ body{
   background-color: rgb(242,247,235);
   align-content: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 50px;
   margin-left: 15%;
   margin-right: 15%;
 }

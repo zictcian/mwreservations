@@ -5,8 +5,9 @@
   <div class="fo">
   <div class="gallery-outer" v-for="sitio in sitios" :key="sitio.id">
     <div class="card p-3" style="width: 18rem;">
-      <img class="card-img-top" :src="sitio.logo" alt="Card image cap">
-      <div class="card-body bodycard">
+      <img class="card-img-top" v-show="sitio.logo" :src="sitio.logo" alt="Card image cap" style="  width: 220px;height: 150px;">
+        <img class="card-img-top" v-show="!sitio.logo" src="https://zictcian.000webhostapp.com/default.png" alt="Card image cap" style="  width: 220px;height: 150px;">
+        <div class="card-body bodycard">
         <h5 class="card-title">{{sitio.nombre}}</h5>
         <p class="card-text textocard">{{sitio.descripcion}}</p>
         <button v-on:click="ir(sitio.id, sitio.nombre)" class="btn btn-primary">Reserva por ${{sitio.anticipo}}</button>
@@ -61,7 +62,7 @@ export default {
       const formdata = new FormData()
       formdata.append('cat', this.$route.params.id)
       formdata.append('idZona', localStorage.getItem('zona'))
-      fetch('http://localhost/mwreservation/categoriaEspecifica.php', {
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/categoriaEspecifica.php', {
         method: 'POST',
         body: formdata
       }).then(

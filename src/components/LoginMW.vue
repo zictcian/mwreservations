@@ -18,11 +18,11 @@
             </div>
             <input v-model="password" type="password" class="form-control forgot-password inputwigth" placeholder="Password"/>
         </div>
-        <button id="buttonl" v-on:click="a()" class="btn btn1">olvidaste tu contraseña?</button>
-        <button v-on:click="login" class="btn btn-primary mb-3">Login</button><br>
+        <a class="btn2" v-on:click="a()"><i class="bi bi-envelope-exclamation-fill"> olvidaste tu contraseña?</i></a>
+        <button id="buttonl" v-on:click="login" class="btn btn-primary mb-3">Login</button><br>
         <div class="btn2 btn-group" role="group">
-          <a href="/register" class="btn-secondary" style="margin-right:30px">Eres nuevo? crear cuenta</a>
-          <a href="/newsitio" class="btn-secondary" style="margin-left:30px">Únete y registra tu sitio</a>
+          <a href="/register" style="margin-right:30px">Eres nuevo? crear cuenta</a>
+          <a href="/newsitio" style="margin-left:30px">Únete y registra tu sitio</a>
         </div>
     </div>
     </div>
@@ -77,7 +77,7 @@ export default {
           data.append('correo', this.email)
           data.append('token', '54321')
           data.append('actividad', 'Recordar contraseña')
-          fetch('http://localhost/mwreservation/enviarmail.php', {
+          fetch('https://expresstrip.mwcomeniusdocente.com/app/enviarmail.php', {
             method: 'POST',
             body: data
           }).then(
@@ -104,17 +104,35 @@ export default {
       formdata.append('correo', this.email)
       const pass = await this.encryp(this.password)
       formdata.append('pass', pass)
-      await fetch('http://localhost/mwreservation/login.php', {
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/login.php', {
         method: 'POST',
         body: formdata
       }).then(
         respuest => respuest.json()
       ).then((datosRespuest) => {
         console.log(datosRespuest)
-        console.log(datosRespuest.idestatuscuenta)
-        if (datosRespuest != null) {
-          if (typeof datosRespuest.idestatuscuenta !== 'undefined') {
-            console.log(datosRespuest.id)
+        if (datosRespuest !== 'error') {
+          if (typeof datosRespuest.usuario !== 'undefined') {
+            console.log('sitio')
+            this.error = false
+            localStorage.setItem('valor', datosRespuest.usuario.id)
+            localStorage.setItem('foto', datosRespuest.usuario.foto)
+            localStorage.setItem('nombre', datosRespuest.usuario.nombre)
+            localStorage.setItem('Apaterno', datosRespuest.usuario.Apaterno)
+            localStorage.setItem('Amaterno', datosRespuest.usuario.Amaterno)
+            localStorage.setItem('correo', datosRespuest.usuario.correo)
+            localStorage.setItem('c', datosRespuest.usuario.passencryp)
+            localStorage.setItem('cuenta', datosRespuest.usuario.idestatuscuenta)
+            localStorage.setItem('nivel', '2')
+            if (typeof datosRespuest.sitio !== 'undefined') {
+              localStorage.setItem('local', datosRespuest.sitio.id)
+              localStorage.setItem('Nlocal', datosRespuest.sitio.nombre)
+              localStorage.setItem('sitiodato', datosRespuest.sitio)
+            } else {
+              this.error = true
+            }
+          } else {
+            console.log('usuario')
             this.error = false
             localStorage.setItem('valor', datosRespuest.id)
             localStorage.setItem('foto', datosRespuest.foto)
@@ -125,19 +143,6 @@ export default {
             localStorage.setItem('c', datosRespuest.passencryp)
             localStorage.setItem('cuenta', datosRespuest.idestatuscuenta)
             localStorage.setItem('nivel', '1')
-          } else if (typeof datosRespuest.idestatussitio !== 'undefined') {
-            this.error = false
-            localStorage.setItem('valor', datosRespuest.id)
-            localStorage.setItem('foto', datosRespuest.foto)
-            localStorage.setItem('nombre', datosRespuest.nombre)
-            localStorage.setItem('Apaterno', datosRespuest.Apaterno)
-            localStorage.setItem('Amaterno', datosRespuest.Amaterno)
-            localStorage.setItem('correo', datosRespuest.correo)
-            localStorage.setItem('c', datosRespuest.passencryp)
-            localStorage.setItem('cuenta', datosRespuest.idestatuscuenta)
-            localStorage.setItem('nivel', '2')
-          } else {
-            this.error = true
           }
         } else {
           this.error = true
@@ -177,11 +182,6 @@ body{
 .btn{
   margin-left: 45%;
 }
-.btn1{
-  margin-left: 40%;
-  text-decoration: underline;
-  text-align: center;
-}
 .btn2{
   display: flex;
   text-align: center;
@@ -190,13 +190,11 @@ body{
   align-items: start;
   justify-content: center;
 }
-.btn1:hover{
-  color: blue;
+.btn2:hover{
+  text-decoration: underline;
 }
 .forma{
   background-color: rgb(242,247,235);
-  align-content: center;
-  align-items: center;
   margin-top: 100px;
   margin-left: 15%;
   margin-right: 15%;

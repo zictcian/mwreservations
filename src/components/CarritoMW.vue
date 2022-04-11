@@ -100,7 +100,7 @@ export default {
     traersitios () {
       const formdata = new FormData()
       formdata.append('IdUsua', localStorage.getItem('valor'))
-      fetch('http://localhost/mwreservation/carrito.php', {
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/carrito.php', {
         method: 'POST',
         body: formdata
       }).then(

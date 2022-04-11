@@ -17,10 +17,10 @@
               <abbr title="Lugares"><a href="/inicio" ><i class="bi bi-shop-window colore" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
             <li >
-              <abbr title="Favoritos"><a href="/fav" ><i class="bi bi-heart-fill colore" style="font-size: 1.5rem;"></i></a></abbr>
+              <abbr title="Favoritos"><a href="/fav" ><i class="bi bi-heart" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
             <li>
-              <abbr title="Categorias"><a href="/categorias" ><i class="bi bi-bookmarks" style="font-size: 1.5rem;"></i></a></abbr>
+              <abbr title="Categorias"><a href="/categorias" ><i class="bi bi-tags" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
             <li>
               <abbr title="Login"><a href="/login" ><i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i></a></abbr>
@@ -29,7 +29,7 @@
               <abbr title="Reservaciones"><a href="/carrito" ><i class="bi bi-cart colore" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
             <li>
-              <abbr title="Cuenta"><a href="/usuario" ><i v-show="cliente!='2'" class="bi bi-person-circle colore" style="font-size: 1.5rem;"></i><i v-show="cliente=='2'" class="bi bi-building"></i></a></abbr>
+              <abbr title="Cuenta"><a href="/usuario" ><i v-show="cliente!='2'" class="bi bi-person-circle colore" style="font-size: 1.5rem;"></i><i v-show="cliente=='2'" class="bi bi-building" style="font-size: 1.5rem;"></i></a></abbr>
             </li>
       </ul>
     </div>
@@ -39,27 +39,33 @@
     <header id="header" class="hoc clear">
       <!-- ################################################################################################ -->
       <div id="logo" class="fl_left">
-        <h1><a href="index.html">Express Trip</a></h1>
+        <h1><a href="/">Express Trip</a></h1>
       </div>
       <nav id="mainav" class="fl_right">
         <ul class="clear">
+          <li><a class="drop" href="#"><i class="bi bi-map"></i></a>
+            <ul style="height:100px; overflow:hidden; overflow-y:scroll;background-color:white;">
+              <li v-for="(zon, index) in zonas" :key="index" v-on:click="change(zon.estado)"><a href="#">{{zon.estado}}</a>
+              </li>
+            </ul>
+          </li>
           <li><a class="drop" href="#">Zonas</a>
             <ul>
               <li>
-                <i v-on:click="Zonaquitar()" class="bi bi-trash">Quitar zona</i>
+              <i v-on:click="Zonaquitar()" class="bi bi-trash" style="position:absolute;display: block;bottom: .5rem;left: -.5rem;color:red"></i>
+              <input v-model="zona" class="form-control" type="text" placeholder="Buscar zona" style="margin-left:10px">
+              <i v-on:click="Zonaselec()" class="bi bi-arrow-right-circle" style="position:absolute;display: block;bottom: .5rem;right: 1rem;"></i>
               </li>
-              <li><input v-model="busqueda" class="form-control" type="text" placeholder="Buscar zona">
-              </li>
-              <li><i v-on:click="Zonaselec()" class="bi bi-arrow-right-circle">Cargar zona</i></li>
             </ul>
           </li>
           <li><a class="drop" href="#">Busqueda</a>
             <ul>
-              <li><input v-model="busqueda" class="form-control" type="text" placeholder="Buscar lugar">
+              <li><input v-model="busqueda" type="text" class="form-control" placeholder="Buscar lugar">
+              <i v-on:click="buscar" class="fa fa-search" style="position:absolute;display: block;bottom: .5rem;right: 1rem;"></i>
               </li>
-              <li><i v-on:click="buscar" class="fa fa-search">Buscar</i></li>
             </ul>
           </li>
+          <li><i class="bi bi-question-circle"></i></li>
         </ul>
       </nav>
       <!-- ################################################################################################ -->
@@ -76,12 +82,12 @@ export default {
   data () {
     return {
       busqueda: '',
+      zona: localStorage.getItem('zonaname'),
       zonas: [],
-      zonafija: localStorage.getItem('zona'),
-      zonanombre: localStorage.getItem('zonaname'),
+      zonaid: localStorage.getItem('zona'),
       cliente: localStorage.getItem('nivel'),
-      nombre: localStorage.getItem('nombre'),
-      dato: localStorage.getItem('valor')
+      nombre: localStorage.getItem('Nlocal'),
+      dato: localStorage.getItem('local')
     }
   },
   created: function () {
@@ -102,7 +108,7 @@ export default {
     traersitios () {
       const formdata = new FormData()
       formdata.append('IdUsua', localStorage.getItem('valor'))
-      fetch('http://localhost/mwreservation/zone.php', {
+      fetch('https://expresstrip.mwcomeniusdocente.com/app/zone.php', {
         method: 'POST',
         body: formdata
       }).then(
@@ -124,10 +130,28 @@ export default {
       }
     },
     async Zonaselec () {
-      const newzona = document.getElementById('zonaselected').value
-      console.log(newzona)
-      localStorage.setItem('zona', newzona)
-      localStorage.setItem('zonaname', this.zonas[newzona].estado)
+      console.log(this.zona)
+      const formdata = new FormData()
+      formdata.append('zona', this.zona)
+      await fetch('https://expresstrip.mwcomeniusdocente.com/app/buscarzona.php', {
+        method: 'POST',
+        body: formdata
+      }).then(
+        respuest => respuest.json()
+      ).then((datosRespuest) => {
+        console.log(datosRespuest)
+        if (datosRespuest !== null) {
+          localStorage.setItem('zona', datosRespuest.id)
+          localStorage.setItem('zonaname', datosRespuest.estado)
+        } else {
+          localStorage.setItem('zona', '-1')
+          localStorage.setItem('zonaname', this.zona)
+        }
+      }).catch(e => {
+        console.log(e)
+        localStorage.setItem('zona', '')
+        localStorage.setItem('zonaname', '')
+      })
       await this.$router.push({ path: '/inicio', replace: true })
       this.$router.go(0)
     },
@@ -136,6 +160,9 @@ export default {
       localStorage.setItem('zonaname', '')
       await this.$router.push({ path: '/inicio', replace: true })
       this.$router.go(0)
+    },
+    change (a) {
+      this.zona = a
     }
   }
 }

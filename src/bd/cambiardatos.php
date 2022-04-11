@@ -10,7 +10,7 @@ $validacion=$_POST['validacion'];
 $queryResult=$connect->query("SELECT * FROM usuario WHERE usuario.id='$idUsua'");
 $filas = $queryResult->fetch_all(MYSQLI_ASSOC);
 if(!empty($filas)){
-    $connect->query("UPDATE usuario SET nombre='$nombre', Apaterno='$Apaterno', Amaterno='$Amaterno', correo='$correo', passencryp='$pass' Where id='$idUsua'");
+    $connect->query("UPDATE usuario SET nombre='$nombre', Apaterno='$Apaterno', Amaterno='$Amaterno', passencryp='$pass' Where id='$idUsua'");
     $queryResult=$connect->query("SELECT * FROM usuario Where id='$idUsua'");
     $result=$queryResult->fetch_assoc();
     echo json_encode($result);
